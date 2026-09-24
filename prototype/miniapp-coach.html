@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>教练端小程序 · 羽毛球课堂原型</title>
+<link rel="stylesheet" href="assets/style.css" />
+<style>
+  :root { --primary: #ff8a1f; --primary-dark: #c25e00; --primary-light: #fff3e6; }
+  .hero { background: linear-gradient(135deg, #ffa24a 0%, #e8650a 100%); }
+  .stu { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .stu:last-child { border-bottom: none; }
+  .check { display: flex; gap: 6px; }
+  .check button { padding: 4px 10px; border-radius: 999px; font-size: 12px; background: #f2f4f7; color: var(--text-2); }
+  .check button.on.ok { background: #e6f6ef; color: #0b7d52; }
+  .check button.on.leave { background: var(--info-light); color: var(--info); }
+  .check button.on.absent { background: var(--danger-light); color: var(--danger); }
+  .tl { display: grid; grid-template-columns: 44px repeat(3, 1fr); gap: 4px; font-size: 11px; }
+  .tl .h { text-align: center; color: var(--text-3); padding: 4px 0; }
+  .tl .t { color: var(--text-3); text-align: right; padding-right: 4px; height: 40px; }
+  .tl .c { height: 40px; border-radius: 6px; background: #f7f8fa; }
+  .tl .c.busy { background: var(--primary-light); color: var(--primary-dark); padding: 3px 5px; border-left: 3px solid var(--primary); }
+  .tl .c.free { background: repeating-linear-gradient(45deg, #f0fdf4, #f0fdf4 6px, #e7f8ee 6px, #e7f8ee 12px); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <aside class="stage-side">
+    <a href="index.html">← 返回演示入口</a>
+    <h1 style="margin-top:12px">教练端小程序</h1>
+    <p class="sub">教练在手机上完成点名、快速排课、写点评。复杂排课在 Web 后台完成。</p>
+    <div class="nav-list">
+      <button data-page="p-today" onclick="App.jump('p-today')">今日工作台</button>
+      <button data-page="p-roll" onclick="App.jump('p-roll')">上课点名</button>
+      <button data-page="p-comment" onclick="App.jump('p-comment')">写课后点评</button>
+      <button data-page="p-plan" onclick="App.jump('p-plan')">排课（周视图）</button>
+      <button data-page="p-new" onclick="App.jump('p-new')">新建课程</button>
+      <button data-page="p-avail" onclick="App.jump('p-avail')">设置可约时段</button>
+      <button data-page="p-students" onclick="App.jump('p-students')">我的学员</button>
+      <button data-page="p-me" onclick="App.jump('p-me')">我的</button>
+      <button data-page="p-ai" onclick="App.jump('p-ai')">AI 排课助手 <span class="phase">四期</span></button>
+    </div>
+  </aside>
+
+  <div class="phone"><div class="screen">
+    <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+    <div class="navbar"><button class="back hidden" onclick="App.back()">‹</button><span class="t"></span><div class="capsule">··· <span>◎</span></div></div>
+
+    <!-- 今日 -->
+    <section class="page" id="p-today" data-title="今日">
+      <div class="hero">
+        <div class="row">
+          <div class="avatar" style="background:rgba(255,255,255,.25)">王</div>
+          <div><div class="bold">王建国 教练</div><div class="muted">9月24日 周四 · 星辰馆</div></div>
+        </div>
+        <div class="row" style="margin-top:16px;gap:24px">
+          <div><div style="font-size:26px;font-weight:700">4</div><div class="muted">今日课程</div></div>
+          <div><div style="font-size:26px;font-weight:700">17</div><div class="muted">上课学员</div></div>
+          <div><div style="font-size:26px;font-weight:700">68</div><div class="muted">本月课时</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="between"><span class="title">待办</span><span class="tag red">3</span></div>
+        <div class="list-item" onclick="App.go('p-comment')" style="cursor:pointer"><span>📝</span><span class="grow sub">9/22 青少年进阶班 还有 2 位学员未点评</span><span class="muted">›</span></div>
+        <div class="list-item" onclick="App.tab('p-students')" style="cursor:pointer"><span>⚠️</span><span class="grow sub">3 位学员课时不足 3 次</span><span class="muted">›</span></div>
+        <div class="list-item"><span>🎬</span><span class="grow sub">林小乐 提交了练习视频</span><span class="muted">›</span></div>
+      </div>
+
+      <div class="title" style="padding:0 2px">今日课程</div>
+      <div class="card lesson" style="opacity:.6">
+        <div class="time">09:00<div class="muted">10:00</div></div>
+        <div class="body"><div class="between"><span class="bold">一对一私教 · 周涵</span><span class="tag gray">已完成</span></div><div class="sub">1 号场 · 已签到</div></div>
+      </div>
+      <div class="card lesson">
+        <div class="time">15:00<div class="muted">16:30</div></div>
+        <div class="body"><div class="between"><span class="bold">成人小班</span><span class="tag orange">进行中</span></div><div class="sub">2 号场 · 4/6 人</div>
+          <button class="btn sm" style="margin-top:6px" onclick="App.go('p-roll')">去点名</button></div>
+      </div>
+      <div class="card lesson">
+        <div class="time">18:30<div class="muted">20:00</div></div>
+        <div class="body"><div class="between"><span class="bold">青少年进阶班</span><span class="tag green">待上课</span></div><div class="sub">3 号场 · 5/6 人 · 反手高远球</div></div>
+      </div>
+      <div class="card lesson">
+        <div class="time">20:00<div class="muted">21:00</div></div>
+        <div class="body"><div class="between"><span class="bold">一对一私教 · 张睿</span><span class="tag green">待上课</span></div><div class="sub">1 号场</div></div>
+      </div>
+    </section>
+
+    <!-- 点名 -->
+    <section class="page" id="p-roll" data-title="上课点名">
+      <div class="card">
+        <div class="title">成人小班 · 双打轮转</div>
+        <div class="sub">今天 15:00-16:30 · 2 号场</div>
+        <div class="row" style="margin-top:8px"><span class="tag green">已到 <span id="cnt-ok">2</span></span><span class="tag blue">请假 1</span><span class="tag red">缺席 0</span></div>
+      </div>
+      <div class="card" id="roll">
+        <div class="stu"><div class="avatar sm">陈</div><div class="grow"><div class="bold">陈思远</div><div class="muted">剩余 8 课时</div></div>
+          <div class="check"><button class="ok on">到</button><button class="leave">假</button><button class="absent">缺</button></div></div>
+        <div class="stu"><div class="avatar sm blue">刘</div><div class="grow"><div class="bold">刘一鸣</div><div class="muted">剩余 2 课时 <span class="tag red">不足</span></div></div>
+          <div class="check"><button class="ok on">到</button><button class="leave">假</button><button class="absent">缺</button></div></div>
+        <div class="stu"><div class="avatar sm purple">赵</div><div class="grow"><div class="bold">赵可欣</div><div class="muted">剩余 15 课时</div></div>
+          <div class="check"><button class="ok">到</button><button class="leave on">假</button><button class="absent">缺</button></div></div>
+        <div class="stu"><div class="avatar sm orange">孙</div><div class="grow"><div class="bold">孙浩</div><div class="muted">剩余 6 课时</div></div>
+          <div class="check"><button class="ok">到</button><button class="leave">假</button><button class="absent">缺</button></div></div>
+      </div>
+      <div class="muted" style="padding:0 4px">提交后：“到” 和 “缺” 扣 1 课时，“假” 不扣（按俱乐部规则可配置）。</div>
+      <button class="btn block" onclick="toast('点名已提交，已消课并通知家长');App.back()">提交点名</button>
+    </section>
+
+    <!-- 点评 -->
+    <section class="page" id="p-comment" data-title="写课后点评">
+      <div class="card row"><div class="avatar">乐</div><div class="grow"><div class="bold">林小乐</div><div class="muted">9/22 青少年进阶班</div></div><span class="muted">1/2</span></div>
+      <div class="card">
+        <div class="title" style="margin-bottom:10px">技术评分</div>
+        <div class="col" id="stars" style="gap:10px">
+          <div class="between"><span class="sub">杀球</span><span class="star" data-v="4"></span></div>
+          <div class="between"><span class="sub">步法</span><span class="star" data-v="3"></span></div>
+          <div class="between"><span class="sub">反手</span><span class="star" data-v="3"></span></div>
+          <div class="between"><span class="sub">网前</span><span class="star" data-v="4"></span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title" style="margin-bottom:8px">点评内容</div>
+        <textarea class="input" rows="4">今天正手杀球发力比上周好很多，注意击球后快速回位。反手握拍还是偏紧，击球前放松手指。</textarea>
+        <div class="chips" style="margin-top:8px">
+          <button onclick="appendTip(this)">+ 进步明显</button><button onclick="appendTip(this)">+ 注意回位</button><button onclick="appendTip(this)">+ 多练步法</button>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <div class="video-thumb" style="width:80px;height:80px">▶<span>00:48</span></div>
+          <div class="video-thumb" style="width:80px;height:80px;background:#f2f4f7;color:var(--text-3)">＋</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="between"><span class="title">布置作业</span><span class="tag orange">可选</span></div>
+        <input class="input" style="margin-top:8px" value="每天 50 次挥拍练习，拍 30 秒视频上传" />
+      </div>
+      <button class="btn block" onclick="toast('点评已发送给学员和家长');App.back()">发送点评（下一位）</button>
+    </section>
+
+    <!-- 排课 -->
+    <section class="page" id="p-plan" data-title="排课">
+      <div class="card">
+        <div class="between" style="margin-bottom:8px"><span class="bold">‹ 9月21日 - 27日 ›</span><button class="btn sm" onclick="App.go('p-new')">＋ 新建</button></div>
+        <div class="week" id="week">
+          <button class="dot">一<b>21</b></button><button class="dot">二<b>22</b></button><button>三<b>23</b></button>
+          <button class="on dot">四<b>24</b></button><button class="dot">五<b>25</b></button><button class="dot">六<b>26</b></button><button>日<b>27</b></button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="between" style="margin-bottom:8px"><span class="title">周四 场地占用</span><span class="muted">▨ 我的可约时段</span></div>
+        <div class="tl">
+          <div></div><div class="h">1 号场</div><div class="h">2 号场</div><div class="h">3 号场</div>
+          <div class="t">09:00</div><div class="c busy">私教·周涵</div><div class="c"></div><div class="c"></div>
+          <div class="t">10:00</div><div class="c free"></div><div class="c"></div><div class="c"></div>
+          <div class="t">14:00</div><div class="c free"></div><div class="c"></div><div class="c"></div>
+          <div class="t">15:00</div><div class="c"></div><div class="c busy">成人小班</div><div class="c"></div>
+          <div class="t">16:00</div><div class="c"></div><div class="c busy">成人小班</div><div class="c"></div>
+          <div class="t">18:30</div><div class="c"></div><div class="c"></div><div class="c busy">青少年进阶</div>
+          <div class="t">20:00</div><div class="c busy">私教·张睿</div><div class="c"></div><div class="c"></div>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn line grow" onclick="App.go('p-avail')">设置可约时段</button>
+        <button class="btn ghost grow" onclick="toast('已复制上周课表到本周（3 节冲突已跳过）')">复制上周</button>
+      </div>
+    </section>
+
+    <!-- 新建课程 -->
+    <section class="page" id="p-new" data-title="新建课程">
+      <div class="card">
+        <div class="form-item"><label>课程类型</label>
+          <div class="seg" id="seg-type"><button class="on">小班课</button><button>私教</button><button>大班课</button><button>体验课</button></div></div>
+        <div class="form-item"><label>课程名称</label><input class="input" value="青少年进阶班" /></div>
+        <div class="grid2">
+          <div class="form-item"><label>日期</label><input class="input" type="date" value="2026-09-29" /></div>
+          <div class="form-item"><label>场地</label><select class="input"><option>3 号场</option><option>1 号场</option><option>2 号场</option></select></div>
+          <div class="form-item"><label>开始</label><input class="input" type="time" value="18:30" /></div>
+          <div class="form-item"><label>结束</label><input class="input" type="time" value="20:00" /></div>
+          <div class="form-item"><label>人数上限</label><input class="input" value="6" /></div>
+          <div class="form-item"><label>消耗课时</label><input class="input" value="1" /></div>
+        </div>
+        <div class="form-item"><label>重复</label>
+          <div class="chips" id="rep"><button>不重复</button><button class="on">每周二、四</button><button>每天</button></div></div>
+        <div class="form-item"><label>持续</label><input class="input" value="8 周（共 16 节）" /></div>
+        <div class="form-item"><label>指定学员（固定班）</label>
+          <div class="row" style="flex-wrap:wrap"><span class="tag green">林小乐 ×</span><span class="tag green">王明 ×</span><span class="tag green">李佳 ×</span><span class="tag green">张睿 ×</span><span class="tag green">周涵 ×</span><span class="tag gray">＋ 添加</span></div></div>
+      </div>
+      <div class="card" style="background:var(--danger-light);box-shadow:none">
+        <div class="bold" style="color:var(--danger)">⚠ 检测到 1 处冲突</div>
+        <div class="sub">10/1 周四 为国庆停课日，将自动跳过。</div>
+      </div>
+      <button class="btn block" onclick="toast('已生成 15 节课程，并通知 5 位学员');App.back()">发布课程</button>
+    </section>
+
+    <!-- 可约时段 -->
+    <section class="page" id="p-avail" data-title="可约时段">
+      <div class="muted" style="padding:0 4px">学员只能在这些时段预约你的私教课。</div>
+      <div class="card" id="avail">
+        <div class="list-item"><span class="bold" style="width:40px">周一</span><div class="grow row" style="flex-wrap:wrap"><span class="tag orange">09:00-12:00</span><span class="tag orange">19:00-21:00</span></div><button class="muted">编辑</button></div>
+        <div class="list-item"><span class="bold" style="width:40px">周二</span><div class="grow row"><span class="tag gray">休息</span></div><button class="muted">编辑</button></div>
+        <div class="list-item"><span class="bold" style="width:40px">周三</span><div class="grow row"><span class="tag orange">14:00-18:00</span></div><button class="muted">编辑</button></div>
+        <div class="list-item"><span class="bold" style="width:40px">周四</span><div class="grow row"><span class="tag orange">10:00-15:00</span></div><button class="muted">编辑</button></div>
+        <div class="list-item"><span class="bold" style="width:40px">周五</span><div class="grow row"><span class="tag orange">19:00-22:00</span></div><button class="muted">编辑</button></div>
+        <div class="list-item"><span class="bold" style="width:40px">周六</span><div class="grow row" style="flex-wrap:wrap"><span class="tag orange">09:00-12:00</span><span class="tag orange">14:00-18:00</span></div><button class="muted">编辑</button></div>
+        <div class="list-item"><span class="bold" style="width:40px">周日</span><div class="grow row"><span class="tag orange">09:00-12:00</span></div><button class="muted">编辑</button></div>
+      </div>
+      <button class="btn block" onclick="toast('已保存，学员端即时生效');App.back()">保存</button>
+    </section>
+
+    <!-- 学员 -->
+    <section class="page" id="p-students" data-title="我的学员">
+      <input class="input" placeholder="🔍 搜索学员姓名 / 手机号" />
+      <div class="chips" id="stu-filter"><button class="on">全部 32</button><button>课时不足 3</button><button>本周有课 17</button><button>待点评 2</button></div>
+      <div class="card">
+        <div class="stu"><div class="avatar sm blue">刘</div><div class="grow"><div class="bold">刘一鸣 <span class="tag red">剩 2</span></div><div class="muted">成人小班 · 最近上课 今天</div></div><button class="btn sm line" onclick="toast('已发送续费提醒给刘一鸣')">提醒续费</button></div>
+        <div class="stu"><div class="avatar sm">王</div><div class="grow"><div class="bold">王明 <span class="tag red">剩 1</span></div><div class="muted">青少年进阶班 · 家长 王女士</div></div><button class="btn sm line" onclick="toast('已发送续费提醒给王女士')">提醒续费</button></div>
+        <div class="stu"><div class="avatar sm">乐</div><div class="grow"><div class="bold">林小乐 <span class="tag green">剩 12</span></div><div class="muted">青少年进阶班 · L3</div></div><button class="muted" onclick="App.go('p-comment')">点评 ›</button></div>
+        <div class="stu"><div class="avatar sm purple">睿</div><div class="grow"><div class="bold">张睿 <span class="tag green">剩 20</span></div><div class="muted">私教 · 每周四 20:00</div></div><span class="muted">›</span></div>
+        <div class="stu"><div class="avatar sm orange">涵</div><div class="grow"><div class="bold">周涵 <span class="tag orange">剩 3</span></div><div class="muted">私教 · 每周四 09:00</div></div><span class="muted">›</span></div>
+      </div>
+    </section>
+
+    <!-- 我的 -->
+    <section class="page" id="p-me" data-title="我的">
+      <div class="card row">
+        <div class="avatar orange" style="width:56px;height:56px;font-size:20px">王</div>
+        <div class="grow"><div class="title">王建国</div><div class="muted">主教练 · 国家一级运动员 · 执教 12 年</div></div>
+      </div>
+      <div class="card">
+        <div class="title">9 月课时统计</div>
+        <div class="grid4" style="margin-top:12px">
+          <div><div class="title">68</div><div class="muted">总课时</div></div>
+          <div><div class="title">24</div><div class="muted">私教</div></div>
+          <div><div class="title">44</div><div class="muted">班课</div></div>
+          <div><div class="title">96%</div><div class="muted">出勤率</div></div>
+        </div>
+      </div>
+      <div class="card" style="padding:4px 14px">
+        <div class="list-item"><span>🎬</span><span class="grow">我上传的视频</span><span class="muted">18 ›</span></div>
+        <div class="list-item"><span>⭐</span><span class="grow">学员评价</span><span class="muted">4.9 ›</span></div>
+        <div class="list-item"><span>🔔</span><span class="grow">每日课表提醒</span><span class="tag green">07:30</span></div>
+        <div class="list-item"><span>🖥️</span><span class="grow">Web 后台登录</span><span class="muted">扫码登录 ›</span></div>
+        <div class="list-item" onclick="location.href='miniapp-student.html'" style="cursor:pointer"><span>🔄</span><span class="grow">切换为学员身份</span><span class="muted">›</span></div>
+      </div>
+    </section>
+
+    <!-- AI -->
+    <section class="page" id="p-ai" data-title="AI 排课助手" style="padding:0;gap:0">
+      <div class="chips" style="padding:10px 12px 0">
+        <button onclick="Agent.ask('下周二、四晚上7点给青少年进阶班排课，3号场')">语音排课</button>
+        <button onclick="Agent.ask('明天有哪些学员课时不足')">课时不足</button>
+        <button onclick="Agent.ask('我明天有几节课')">明天课表</button>
+        <button onclick="Agent.ask('帮我写林小乐的点评')">生成点评</button>
+      </div>
+      <div class="chat" id="chat"></div>
+      <div class="ai-tip">内容由 AI 生成，排课等操作需你确认后生效</div>
+      <div class="chat-input"><button>🎤</button><input id="chat-in" placeholder="例如：周六上午给张睿加一节私教" /><button class="btn sm" id="chat-send">发送</button></div>
+    </section>
+
+    <button class="fab" onclick="App.go('p-ai')" title="AI 助手">🤖</button>
+
+    <div class="tabbar">
+      <button data-page="p-today"><span class="ico">📋</span>今日</button>
+      <button data-page="p-plan"><span class="ico">🗓️</span>排课</button>
+      <button data-page="p-students"><span class="ico">👥</span>学员</button>
+      <button data-page="p-me"><span class="ico">👤</span>我的</button>
+    </div>
+  </div></div>
+</div>
+
+<script src="assets/common.js"></script>
+<script>
+  App.init('p-today');
+  bindGroup('#week');
+  bindGroup('#seg-type');
+  bindGroup('#rep');
+  bindGroup('#stu-filter');
+  document.querySelectorAll('#roll .check').forEach(g => g.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    g.querySelectorAll('button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    document.getElementById('cnt-ok').textContent = document.querySelectorAll('#roll .ok.on').length;
+  })));
+
+  document.querySelectorAll('.star').forEach(s => {
+    const render = v => {
+      s.dataset.v = v;
+      s.innerHTML = [1, 2, 3, 4, 5].map(i => `<button data-i="${i}" style="font-size:18px;color:${i <= v ? '#ff8a1f' : '#d0d5dd'}">★</button>`).join('');
+      s.querySelectorAll('button').forEach(b => b.onclick = () => render(+b.dataset.i));
+    };
+    render(+s.dataset.v);
+  });
+
+  function appendTip(btn) {
+    const ta = document.querySelector('#p-comment textarea');
+    ta.value += ' ' + btn.textContent.replace('+ ', '') + '。';
+  }
+
+  Agent.mount(document.getElementById('chat'), document.getElementById('chat-in'), document.getElementById('chat-send'), [
+    { match: ['排课', '排', '加一节'], reply: '已为你生成排课草稿，请确认：<div class="card-in"><b>青少年进阶班</b> · 3 号场<br>📅 9/29 周二 19:00-20:30<br>📅 10/1 周四 19:00-20:30 <span class="tag red">国庆停课</span><br><span class="muted">自动带入固定学员 5 人 · 无教练 / 场地冲突</span><div class="row" style="margin-top:8px"><button class="btn sm" onclick="Agent.confirm(this,\'已发布 9/29 课程，10/1 已跳过。5 位学员已收到订阅消息 + 短信通知。\')">确认发布</button><button class="btn sm line" onclick="Agent.cancel(this)">修改</button></div></div>' },
+    { match: ['不足', '续费'], reply: '明天上课的学员中有 <b>2 位</b>课时不足：<div class="card-in">⚠ 刘一鸣 · 剩 2 课时 · 成人小班<br>⚠ 王明 · 剩 1 课时 · 青少年进阶班<div class="row" style="margin-top:8px"><button class="btn sm" onclick="Agent.confirm(this,\'已向 2 位学员（家长）发送续费提醒短信。\')">一键提醒续费</button></div></div>' },
+    { match: ['几节课', '明天', '课表'], reply: '你明天（9/25 周五）有 <b>3 节课</b>：<div class="card-in">09:00 私教 · 周涵 · 1 号场<br>14:00 成人小班 · 2 号场 · 5/6 人<br>19:00 私教 · 张睿 · 1 号场</div>' },
+    { match: ['点评', '评语'], reply: '根据林小乐最近 4 节课的评分和你的历史点评，生成草稿：<div class="card-in">“小乐本周杀球发力进步明显，击球点更靠前了。需要加强击球后的回位速度，反手握拍放松一些。作业：每天 50 次挥拍 + 米字步法 3 组。”<div class="row" style="margin-top:8px"><button class="btn sm" onclick="Agent.confirm(this,\'点评已发送给林小乐和家长。\')">直接发送</button><button class="btn sm line" onclick="App.go(\'p-comment\')">去编辑</button></div></div>' },
+  ], '王教练你好 👋 我可以帮你<b>排课、查课表、找课时不足的学员、生成点评草稿</b>。按住 🎤 可语音输入。');
+</script>
+</body>
+</html>
