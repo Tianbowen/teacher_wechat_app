@@ -19,9 +19,10 @@
       <button data-page="p-schedule" onclick="App.jump('p-schedule')">课表 / 约课</button>
       <button data-page="p-book" onclick="App.jump('p-book')">预约私教</button>
       <button data-page="p-lesson" onclick="App.jump('p-lesson')">课程详情 / 取消</button>
-      <button data-page="p-learn" onclick="App.jump('p-learn')">学习：视频 / 点评 / 心得</button>
-      <button data-page="p-review" onclick="App.jump('p-review')">教练点评详情</button>
+      <button data-page="p-learn" onclick="App.jump('p-learn')">学习：视频 / 点评 / 心得 <span class="phase p3">三期</span></button>
+      <button data-page="p-review" onclick="App.jump('p-review')">教练点评详情 <span class="phase p3">三期</span></button>
       <button data-page="p-me" onclick="App.jump('p-me')">我的</button>
+      <button data-page="p-messages" onclick="App.jump('p-messages')">消息</button>
       <button data-page="p-credits" onclick="App.jump('p-credits')">课时流水</button>
       <button data-page="p-ai" onclick="App.jump('p-ai')">AI 助手 <span class="phase">四期</span></button>
     </div>
@@ -174,7 +175,7 @@
           <div class="body">
             <div class="between"><span class="bold">青少年基础班</span><span class="tag red">已满</span></div>
             <div class="sub">王建国 · 深职大馆 3 号场</div>
-            <div class="between" style="margin-top:6px"><span class="muted">候补 1 人</span><button class="btn sm line" onclick="toast('已加入候补，有空位将第一时间通知你')">候补</button></div>
+            <div class="between" style="margin-top:6px"><span class="muted">满员</span><button class="btn sm line" onclick="toast('候补是二期能力，一期请联系教练或前台')">候补 <span class="phase p2">二期</span></button></div>
           </div>
         </div>
         <div class="card lesson blue">
@@ -234,15 +235,12 @@
         </div>
       </div>
       <div class="card">
-        <div class="title">同班学员（5/6）</div>
-        <div class="row" style="margin-top:10px">
-          <div class="avatar sm">乐</div><div class="avatar sm orange">明</div><div class="avatar sm blue">佳</div><div class="avatar sm purple">睿</div><div class="avatar sm">涵</div>
-        </div>
+        <div class="between"><span class="title">人数</span><span class="muted">5/6</span></div>
+        <div class="sub" style="margin-top:8px">已约满进度仅显示人数。同班名单仅教练和馆长可见。</div>
       </div>
       <div class="card">
-        <div class="title">提醒</div>
-        <div class="list-item"><span class="grow sub">前一天 20:00 微信提醒</span><span class="tag green">已开启</span></div>
-        <div class="list-item"><span class="grow sub">开课前 2 小时短信提醒</span><span class="tag green">已开启</span></div>
+        <div class="title">上课提醒</div>
+        <div class="sub" style="margin-top:8px">按俱乐部规则发送：前一天 20:00 微信，开课前 2 小时短信。约课时授权订阅消息，此处不能关闭履约提醒。</div>
       </div>
       <div class="row">
         <button class="btn line grow" onclick="toast('已打开导航：深职大体育馆')">📍 导航</button>
@@ -346,8 +344,9 @@
       </div>
       <div class="card" style="padding:4px 14px">
         <div class="list-item" onclick="App.go('p-pass')" style="cursor:pointer"><span>🪪</span><span class="grow">校区出入证</span><span class="tag green">有效</span></div>
+        <div class="list-item" onclick="App.go('p-messages')" style="cursor:pointer"><span>📩</span><span class="grow">消息</span><span class="muted">3 ›</span></div>
         <div class="list-item" onclick="App.go('p-credits')" style="cursor:pointer"><span>📒</span><span class="grow">课时流水</span><span class="muted">›</span></div>
-        <div class="list-item" onclick="toast('三期：成长档案时间线')" style="cursor:pointer"><span>📈</span><span class="grow">成长档案</span><span class="muted">›</span></div>
+        <div class="list-item" onclick="toast('成长档案为三期，一期不验收')" style="cursor:pointer"><span>📈</span><span class="grow">成长档案</span><span class="muted"><span class="phase p3">三期</span> ›</span></div>
         <div class="list-item"><span>🔔</span><span class="grow">上课提醒</span><span class="muted">约课时授权订阅消息</span></div>
         <div class="list-item" onclick="toast('可管理多个孩子')" style="cursor:pointer"><span>👨‍👧</span><span class="grow">家庭成员</span><span class="muted">2 人 ›</span></div>
         <div class="list-item" onclick="location.href='miniapp-coach.html'" style="cursor:pointer"><span>🔄</span><span class="grow">切换为教练身份</span><span class="muted">›</span></div>
@@ -381,6 +380,16 @@
           <button class="btn block ghost" style="margin-top:14px" onclick="PassCard.refresh(true)">立即刷新二维码</button>
         </div>
         <div class="pass-tip">出示给门岗扫描即可入校上课<br>建议调高屏幕亮度 · 截图转发将失效</div>
+      </div>
+    </section>
+
+    <!-- 消息 -->
+    <section class="page" id="p-messages" data-title="消息">
+      <div class="muted" style="padding:0 4px">只读通知记录。关闭营销不影响上课履约提醒。</div>
+      <div class="card" style="padding:4px 14px">
+        <div class="list-item"><span>📅</span><div class="grow"><div class="sub">明日上课提醒</div><div class="muted">青少年进阶班 · 周四 18:30 · 3 号场</div></div><span class="tag green">已送达</span></div>
+        <div class="list-item"><span>💳</span><div class="grow"><div class="sub">课包已开通</div><div class="muted">青少年 48 次卡 · 前台手工开通</div></div><span class="tag green">已送达</span></div>
+        <div class="list-item"><span>⚠️</span><div class="grow"><div class="sub">短信发送失败</div><div class="muted">9/23 上课提醒 · 将由前台跟进</div></div><span class="tag red">失败</span></div>
       </div>
     </section>
 

@@ -19,8 +19,27 @@
   .tl .h { text-align: center; color: var(--text-3); padding: 4px 0; }
   .tl .t { color: var(--text-3); text-align: right; padding-right: 4px; height: 40px; }
   .tl .c { height: 40px; border-radius: 6px; background: #f7f8fa; }
-  .tl .c.busy { background: var(--primary-light); color: var(--primary-dark); padding: 3px 5px; border-left: 3px solid var(--primary); }
+  .tl .c.busy { background: var(--primary-light); color: var(--primary-dark); padding: 3px 5px; border-left: 3px solid var(--primary); cursor: pointer; }
   .tl .c.free { background: repeating-linear-gradient(45deg, #f0fdf4, #f0fdf4 6px, #e7f8ee 6px, #e7f8ee 12px); }
+  .card.lesson { cursor: pointer; }
+  .ld-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
+  .ld-kv .k { font-size: 12px; color: var(--text-3); }
+  .ld-kv .v { font-weight: 600; margin-top: 2px; }
+  .hours-hit { cursor: pointer; }
+  .hours-hit:active { opacity: .85; }
+  #hours-list { display: flex; flex-direction: column; gap: 12px; padding-bottom: 8px; }
+  .hl-item {
+    background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 14px 16px; cursor: pointer; display: flex; flex-direction: column; gap: 8px;
+  }
+  .hl-item:active { background: #fafbfc; }
+  .hl-when { font-size: 12px; color: var(--text-3); }
+  .hl-name { font-size: 15px; font-weight: 600; line-height: 1.4; padding-right: 4px; }
+  .hl-meta { font-size: 13px; color: var(--text-2); }
+  .hl-stu {
+    font-size: 12px; color: var(--text-3); line-height: 1.4;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
 </style>
 </head>
 <body>
@@ -28,10 +47,12 @@
   <aside class="stage-side">
     <a href="index.html">← 返回演示入口</a>
     <h1 style="margin-top:12px">教练端小程序</h1>
-    <p class="sub">教练在手机上完成点名、快速排课、写点评。复杂排课在 Web 后台完成。</p>
+        <p class="sub">教练在手机上完成点名、单次加课、写点评。周期排课和调课确认在 Web 后台完成。</p>
     <div class="nav-list">
       <button data-page="p-login" onclick="App.jump('p-login')">微信登录</button>
       <button data-page="p-today" onclick="App.jump('p-today')">今日工作台</button>
+      <button data-page="p-lesson" onclick="openLesson('l2', true)">课次详情</button>
+      <button data-page="p-hours" onclick="openHours(true)">本月课时明细</button>
       <button data-page="p-roll" onclick="App.jump('p-roll')">上课点名</button>
       <button data-page="p-comment" onclick="App.jump('p-comment')">写课后点评</button>
       <button data-page="p-plan" onclick="App.jump('p-plan')">排课（周视图）</button>
@@ -75,7 +96,7 @@
         <div class="row" style="margin-top:16px;gap:24px">
           <div><div style="font-size:26px;font-weight:700">4</div><div class="muted">今日课程</div></div>
           <div><div style="font-size:26px;font-weight:700">17</div><div class="muted">上课学员</div></div>
-          <div><div style="font-size:26px;font-weight:700">68</div><div class="muted">本月课时</div></div>
+          <div class="hours-hit" role="button" onclick="openHours()"><div style="font-size:26px;font-weight:700">68</div><div class="muted">本月课时 ›</div></div>
         </div>
       </div>
 
@@ -87,31 +108,64 @@
       </div>
 
       <div class="title" style="padding:0 2px">今日课程</div>
-      <div class="card lesson" style="opacity:.6">
+      <div class="card lesson" role="button" style="opacity:.6" onclick="openLesson('l1')">
         <div class="time">09:00<div class="muted">10:00</div></div>
-        <div class="body"><div class="between"><span class="bold">一对一私教 · 周涵</span><span class="tag gray">已完成</span></div><div class="sub">1 号场 · 已签到</div></div>
+        <div class="body"><div class="between"><span class="bold">一对一私教 · 周涵</span><span class="tag gray">已完成</span></div><div class="sub">1 小时 · 1 号场 · 周涵</div></div>
       </div>
-      <div class="card lesson">
+      <div class="card lesson" role="button" onclick="openLesson('l2')">
         <div class="time">15:00<div class="muted">16:30</div></div>
-        <div class="body"><div class="between"><span class="bold">成人小班</span><span class="tag orange">进行中</span></div><div class="sub">2 号场 · 4/6 人</div>
-          <button class="btn sm" style="margin-top:6px" onclick="App.go('p-roll')">去点名</button></div>
+        <div class="body"><div class="between"><span class="bold">成人小班</span><span class="tag orange">进行中</span></div><div class="sub">1.5 小时 · 2 号场 · 4/6 人</div>
+          <button class="btn sm" style="margin-top:6px" onclick="event.stopPropagation();openRoll('l2')">去点名</button></div>
       </div>
-      <div class="card lesson">
+      <div class="card lesson" role="button" onclick="openLesson('l3')">
         <div class="time">18:30<div class="muted">20:00</div></div>
-        <div class="body"><div class="between"><span class="bold">青少年进阶班</span><span class="tag green">待上课</span></div><div class="sub">3 号场 · 5/6 人 · 反手高远球</div></div>
+        <div class="body"><div class="between"><span class="bold">青少年进阶班</span><span class="tag green">待上课</span></div><div class="sub">1.5 小时 · 3 号场 · 5/6 人</div></div>
       </div>
-      <div class="card lesson">
+      <div class="card lesson" role="button" onclick="openLesson('l4')">
         <div class="time">20:00<div class="muted">21:00</div></div>
-        <div class="body"><div class="between"><span class="bold">一对一私教 · 张睿</span><span class="tag green">待上课</span></div><div class="sub">1 号场</div></div>
+        <div class="body"><div class="between"><span class="bold">一对一私教 · 张睿</span><span class="tag green">待上课</span></div><div class="sub">1 小时 · 1 号场 · 张睿</div></div>
       </div>
+    </section>
+
+    <!-- 课次详情 -->
+    <section class="page" id="p-lesson" data-title="课次详情">
+      <div class="card">
+        <div class="between"><span class="title" id="ld-name">成人小班</span><span class="tag orange" id="ld-status">进行中</span></div>
+        <div class="ld-kv" style="margin-top:12px" id="ld-kv"></div>
+      </div>
+      <div class="card">
+        <div class="between"><span class="title">上课学员</span><span class="muted" id="ld-cnt">4/6</span></div>
+        <div id="ld-stu"></div>
+      </div>
+      <div class="row" id="ld-actions"></div>
+    </section>
+
+    <!-- 本月课时 -->
+    <section class="page" id="p-hours" data-title="本月课时">
+      <div class="card">
+        <div class="title">9 月课时统计</div>
+        <div class="grid4" style="margin-top:12px">
+          <div><div class="title">68</div><div class="muted">总课时</div></div>
+          <div><div class="title">24</div><div class="muted">私教</div></div>
+          <div><div class="title">44</div><div class="muted">班课</div></div>
+          <div><div class="title">96%</div><div class="muted">出勤率</div></div>
+        </div>
+        <div class="muted" style="margin-top:8px">只统计你本人已完成 + 已排课次，不含课酬。</div>
+      </div>
+      <div class="chips" id="hours-filter">
+        <button class="on" data-f="all">全部 8</button>
+        <button data-f="private">私教 3</button>
+        <button data-f="class">班课 5</button>
+      </div>
+      <div id="hours-list"></div>
     </section>
 
     <!-- 点名 -->
     <section class="page" id="p-roll" data-title="上课点名">
       <div class="card">
-        <div class="title">成人小班 · 双打轮转</div>
-        <div class="sub">今天 15:00-16:30 · 2 号场</div>
-        <div class="row" style="margin-top:8px"><span class="tag green">已到 <span id="cnt-ok">2</span></span><span class="tag blue">请假 1</span><span class="tag red">缺席 0</span></div>
+        <div class="title" id="roll-name">成人小班 · 双打轮转</div>
+        <div class="sub" id="roll-sub">今天 15:00-16:30 · 2 号场</div>
+        <div class="row" style="margin-top:8px"><span class="tag green">已到 <span id="cnt-ok">2</span></span><span class="tag blue">请假 <span id="cnt-leave">1</span></span><span class="tag red">缺席 <span id="cnt-absent">0</span></span></div>
       </div>
       <div class="card" id="roll">
         <div class="stu"><div class="avatar sm">陈</div><div class="grow"><div class="bold">陈思远</div><div class="muted">剩余 8 课时</div></div>
@@ -170,18 +224,18 @@
         <div class="between" style="margin-bottom:8px"><span class="title">周四 场地占用</span><span class="muted">▨ 我的可约时段</span></div>
         <div class="tl">
           <div></div><div class="h">1 号场</div><div class="h">2 号场</div><div class="h">3 号场</div>
-          <div class="t">09:00</div><div class="c busy">私教·周涵</div><div class="c"></div><div class="c"></div>
+          <div class="t">09:00</div><div class="c busy" role="button" onclick="openLesson('l1')">私教·周涵</div><div class="c"></div><div class="c"></div>
           <div class="t">10:00</div><div class="c free"></div><div class="c"></div><div class="c"></div>
           <div class="t">14:00</div><div class="c free"></div><div class="c"></div><div class="c"></div>
-          <div class="t">15:00</div><div class="c"></div><div class="c busy">成人小班</div><div class="c"></div>
-          <div class="t">16:00</div><div class="c"></div><div class="c busy">成人小班</div><div class="c"></div>
-          <div class="t">18:30</div><div class="c"></div><div class="c"></div><div class="c busy">青少年进阶</div>
-          <div class="t">20:00</div><div class="c busy">私教·张睿</div><div class="c"></div><div class="c"></div>
+          <div class="t">15:00</div><div class="c"></div><div class="c busy" role="button" onclick="openLesson('l2')">成人小班</div><div class="c"></div>
+          <div class="t">16:00</div><div class="c"></div><div class="c busy" role="button" onclick="openLesson('l2')">成人小班</div><div class="c"></div>
+          <div class="t">18:30</div><div class="c"></div><div class="c"></div><div class="c busy" role="button" onclick="openLesson('l3')">青少年进阶</div>
+          <div class="t">20:00</div><div class="c busy" role="button" onclick="openLesson('l4')">私教·张睿</div><div class="c"></div><div class="c"></div>
         </div>
       </div>
       <div class="row">
         <button class="btn line grow" onclick="App.go('p-avail')">设置可约时段</button>
-        <button class="btn ghost grow" onclick="toast('已复制上周课表到本周（3 节冲突已跳过）')">复制上周</button>
+        <button class="btn ghost grow" onclick="toast('复制课表为二期，一期请在 Web 逐节排课')">复制上周 <span class="phase p2">二期</span></button>
       </div>
     </section>
 
@@ -200,16 +254,19 @@
           <div class="form-item"><label>消耗课时</label><input class="input" value="1" /></div>
         </div>
         <div class="form-item"><label>重复</label>
-          <div class="chips" id="rep"><button>不重复</button><button class="on">每周二、四</button><button>每天</button></div></div>
-        <div class="form-item"><label>持续</label><input class="input" value="8 周（共 16 节）" /></div>
+          <div class="chips"><button class="on">不重复（仅本节）</button></div>
+          <div class="muted" style="margin-top:6px">周期排课请到 Web 排课中心。手机只加本人的一节课。</div></div>
         <div class="form-item"><label>指定学员（固定班）</label>
           <div class="row" style="flex-wrap:wrap"><span class="tag green">林小乐 ×</span><span class="tag green">王明 ×</span><span class="tag green">李佳 ×</span><span class="tag green">张睿 ×</span><span class="tag green">周涵 ×</span><span class="tag gray">＋ 添加</span></div></div>
       </div>
       <div class="card" style="background:var(--danger-light);box-shadow:none">
         <div class="bold" style="color:var(--danger)">⚠ 检测到 1 处冲突</div>
-        <div class="sub">10/1 周四 为国庆停课日，将自动跳过。</div>
+        <div class="sub">3 号场 18:30 已有「青少年进阶班」。改时间或场地后再发布；草稿仍可保存。</div>
       </div>
-      <button class="btn block" onclick="toast('已生成 15 节课程，并通知 5 位学员');App.back()">发布课程</button>
+      <div class="row">
+        <button class="btn line grow" onclick="toast('已保存为草稿，未通知学员');App.back()">保存草稿</button>
+        <button class="btn grow" onclick="toast('已发布本节课，指定学员已收到提醒');App.back()">发布本节</button>
+      </div>
     </section>
 
     <!-- 可约时段 -->
@@ -246,8 +303,8 @@
         <div class="avatar orange" style="width:56px;height:56px;font-size:20px">王</div>
         <div class="grow"><div class="title">王建国</div><div class="muted">主教练 · 国家一级运动员 · 执教 12 年</div></div>
       </div>
-      <div class="card">
-        <div class="title">9 月课时统计</div>
+      <div class="card hours-hit" role="button" onclick="openHours()">
+        <div class="between"><span class="title">9 月课时统计</span><span class="muted">课次明细 ›</span></div>
         <div class="grid4" style="margin-top:12px">
           <div><div class="title">68</div><div class="muted">总课时</div></div>
           <div><div class="title">24</div><div class="muted">私教</div></div>
@@ -305,13 +362,159 @@
   App.init('p-login');
   bindGroup('#week');
   bindGroup('#seg-type');
-  bindGroup('#rep');
   bindGroup('#stu-filter');
-  document.querySelectorAll('#roll .check').forEach(g => g.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
-    g.querySelectorAll('button').forEach(x => x.classList.remove('on'));
-    b.classList.add('on');
+
+  const LESSONS = {
+    l1: { id: 'l1', type: 'private', name: '一对一私教 · 周涵', theme: '技术纠正', date: '9月24日 周四', start: '09:00', end: '10:00', dur: '1 小时', court: '1 号场', credit: '2 课时', cap: 1, status: 'done',
+      students: [{ name: '周涵', face: '涵', color: 'orange', remain: 3, st: '已签到', att: 'ok' }] },
+    l2: { id: 'l2', type: 'class', name: '成人小班', theme: '双打轮转', date: '9月24日 周四', start: '15:00', end: '16:30', dur: '1.5 小时', court: '2 号场', credit: '1 课时', cap: 6, status: 'live',
+      students: [
+        { name: '陈思远', face: '陈', color: '', remain: 8, st: '已签到', att: 'ok' },
+        { name: '刘一鸣', face: '刘', color: 'blue', remain: 2, st: '已签到', att: 'ok' },
+        { name: '赵可欣', face: '赵', color: 'purple', remain: 15, st: '请假', att: 'leave' },
+        { name: '孙浩', face: '孙', color: 'orange', remain: 6, st: '未到', att: '' }
+      ] },
+    l3: { id: 'l3', type: 'class', name: '青少年进阶班', theme: '反手高远球', date: '9月24日 周四', start: '18:30', end: '20:00', dur: '1.5 小时', court: '3 号场', credit: '1 课时', cap: 6, status: 'todo',
+      students: [
+        { name: '林小乐', face: '乐', color: '', remain: 12, st: '已预约', att: '' },
+        { name: '王明', face: '王', color: '', remain: 1, st: '已预约', att: '' },
+        { name: '李佳', face: '佳', color: 'blue', remain: 9, st: '已预约', att: '' },
+        { name: '张睿', face: '睿', color: 'purple', remain: 20, st: '已预约', att: '' },
+        { name: '周涵', face: '涵', color: 'orange', remain: 3, st: '已预约', att: '' }
+      ] },
+    l4: { id: 'l4', type: 'private', name: '一对一私教 · 张睿', theme: '杀球发力', date: '9月24日 周四', start: '20:00', end: '21:00', dur: '1 小时', court: '1 号场', credit: '2 课时', cap: 1, status: 'todo',
+      students: [{ name: '张睿', face: '睿', color: 'purple', remain: 20, st: '已预约', att: '' }] },
+    l5: { id: 'l5', type: 'private', name: '一对一私教 · 周涵', theme: '步法', date: '9月20日 周六', start: '09:00', end: '10:00', dur: '1 小时', court: '1 号场', credit: '2 课时', cap: 1, status: 'done',
+      students: [{ name: '周涵', face: '涵', color: 'orange', remain: 5, st: '已签到', att: 'ok' }] },
+    l6: { id: 'l6', type: 'class', name: '青少年进阶班', theme: '正手杀球', date: '9月22日 周二', start: '18:30', end: '20:00', dur: '1.5 小时', court: '3 号场', credit: '1 课时', cap: 6, status: 'done',
+      students: [
+        { name: '林小乐', face: '乐', color: '', remain: 13, st: '已签到', att: 'ok' },
+        { name: '王明', face: '王', color: '', remain: 2, st: '缺席', att: 'absent' },
+        { name: '张睿', face: '睿', color: 'purple', remain: 21, st: '已签到', att: 'ok' },
+        { name: '周涵', face: '涵', color: 'orange', remain: 4, st: '已签到', att: 'ok' }
+      ] },
+    l7: { id: 'l7', type: 'class', name: '成人小班', theme: '多球喂球', date: '9月18日 周五', start: '15:00', end: '16:30', dur: '1.5 小时', court: '2 号场', credit: '1 课时', cap: 6, status: 'done',
+      students: [
+        { name: '陈思远', face: '陈', color: '', remain: 9, st: '已签到', att: 'ok' },
+        { name: '刘一鸣', face: '刘', color: 'blue', remain: 3, st: '已签到', att: 'ok' },
+        { name: '赵可欣', face: '赵', color: 'purple', remain: 16, st: '已签到', att: 'ok' }
+      ] },
+    l8: { id: 'l8', type: 'class', name: '青少年进阶班', theme: '网前勾对角', date: '9月16日 周二', start: '18:30', end: '20:00', dur: '1.5 小时', court: '3 号场', credit: '1 课时', cap: 6, status: 'done',
+      students: [
+        { name: '林小乐', face: '乐', color: '', remain: 14, st: '已签到', att: 'ok' },
+        { name: '李佳', face: '佳', color: 'blue', remain: 10, st: '请假', att: 'leave' },
+        { name: '张睿', face: '睿', color: 'purple', remain: 22, st: '已签到', att: 'ok' },
+        { name: '周涵', face: '涵', color: 'orange', remain: 5, st: '已签到', att: 'ok' }
+      ] }
+  };
+  const HOUR_IDS = ['l1', 'l2', 'l3', 'l4', 'l5', 'l6', 'l7', 'l8'];
+
+  function statusMeta(st) {
+    if (st === 'done') return { text: '已完成', cls: 'gray' };
+    if (st === 'live') return { text: '进行中', cls: 'orange' };
+    return { text: '待上课', cls: 'green' };
+  }
+  function attendCls(st) {
+    if (st === '已签到') return 'green';
+    if (st === '请假') return 'orange';
+    if (st === '缺席' || st === '未到') return 'red';
+    return 'blue';
+  }
+  function namesOf(l) {
+    return l.students.map(s => s.name).join('、');
+  }
+
+  function openHours(jump) {
+    document.querySelectorAll('#hours-filter button').forEach(b => b.classList.toggle('on', b.dataset.f === 'all'));
+    renderHours('all');
+    if (jump) App.jump('p-hours');
+    else App.go('p-hours');
+  }
+
+  function openLesson(id, jump) {
+    const l = LESSONS[id];
+    if (!l) return;
+    const sm = statusMeta(l.status);
+    document.getElementById('ld-name').textContent = l.name;
+    const tag = document.getElementById('ld-status');
+    tag.className = 'tag ' + sm.cls;
+    tag.textContent = sm.text;
+    document.getElementById('ld-kv').innerHTML = `
+      <div><div class="k">日期</div><div class="v">${l.date}</div></div>
+      <div><div class="k">时间</div><div class="v">${l.start}–${l.end}</div></div>
+      <div><div class="k">时长</div><div class="v">${l.dur}</div></div>
+      <div><div class="k">场地</div><div class="v">${l.court}</div></div>
+      <div><div class="k">人数</div><div class="v">${l.students.length}/${l.cap}</div></div>
+      <div><div class="k">消课</div><div class="v">${l.credit}</div></div>
+      <div style="grid-column:1/-1"><div class="k">主题</div><div class="v">${l.theme}</div></div>`;
+    document.getElementById('ld-cnt').textContent = `${l.students.length}/${l.cap}`;
+    document.getElementById('ld-stu').innerHTML = l.students.map(s => `
+      <div class="stu"><div class="avatar sm ${s.color}">${s.face}</div>
+        <div class="grow"><div class="bold">${s.name}</div><div class="muted">剩余 ${s.remain} 课时${s.remain <= 3 ? ' <span class="tag red">不足</span>' : ''}</div></div>
+        <span class="tag ${attendCls(s.st)}">${s.st}</span></div>`).join('');
+    const acts = [];
+    if (l.status !== 'done') acts.push(`<button class="btn block grow" onclick="openRoll('${l.id}')">去点名</button>`);
+    else {
+      acts.push(`<button class="btn block grow" onclick="App.go('p-comment')">写点评</button>`);
+      acts.push(`<button class="btn line block grow" onclick="toast('点名更正在 Web 后台填写原因后入冲正流水')">申请更正</button>`);
+    }
+    document.getElementById('ld-actions').innerHTML = acts.join('');
+    if (jump) App.jump('p-lesson');
+    else App.go('p-lesson');
+  }
+
+  function bindRollChecks() {
+    document.querySelectorAll('#roll .check').forEach(g => g.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      g.querySelectorAll('button').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      document.getElementById('cnt-ok').textContent = document.querySelectorAll('#roll .ok.on').length;
+      document.getElementById('cnt-leave').textContent = document.querySelectorAll('#roll .leave.on').length;
+      document.getElementById('cnt-absent').textContent = document.querySelectorAll('#roll .absent.on').length;
+    })));
+  }
+
+  function openRoll(id) {
+    const l = LESSONS[id] || LESSONS.l2;
+    document.getElementById('roll-name').textContent = l.theme ? `${l.name} · ${l.theme}` : l.name;
+    document.getElementById('roll-sub').textContent = `${l.date} ${l.start}-${l.end} · ${l.court} · ${l.dur}`;
+    document.getElementById('roll').innerHTML = l.students.map(s => `
+      <div class="stu"><div class="avatar sm ${s.color}">${s.face}</div>
+        <div class="grow"><div class="bold">${s.name}</div><div class="muted">剩余 ${s.remain} 课时${s.remain <= 3 ? ' <span class="tag red">不足</span>' : ''}</div></div>
+        <div class="check">
+          <button class="ok${s.att === 'ok' ? ' on' : ''}">到</button>
+          <button class="leave${s.att === 'leave' ? ' on' : ''}">假</button>
+          <button class="absent${s.att === 'absent' ? ' on' : ''}">缺</button>
+        </div></div>`).join('');
+    bindRollChecks();
     document.getElementById('cnt-ok').textContent = document.querySelectorAll('#roll .ok.on').length;
-  })));
+    document.getElementById('cnt-leave').textContent = document.querySelectorAll('#roll .leave.on').length;
+    document.getElementById('cnt-absent').textContent = document.querySelectorAll('#roll .absent.on').length;
+    App.go('p-roll');
+  }
+
+  function lessonKey(l) {
+    const m = l.date.match(/(\d+)月(\d+)日/);
+    return `${String(m[1]).padStart(2, '0')}-${String(m[2]).padStart(2, '0')} ${l.start}`;
+  }
+  function renderHours(filter) {
+    const ids = HOUR_IDS.filter(id => filter === 'all' || LESSONS[id].type === filter);
+    const order = ids.slice().sort((a, b) => lessonKey(LESSONS[b]).localeCompare(lessonKey(LESSONS[a])));
+    document.getElementById('hours-list').innerHTML = order.map(id => {
+      const l = LESSONS[id];
+      const sm = statusMeta(l.status);
+      const d = l.date.match(/(\d+)月(\d+)日/);
+      return `<div class="hl-item" role="button" onclick="openLesson('${id}')">
+        <div class="between"><span class="hl-when">${d[1]}/${d[2]} · ${l.start}–${l.end}</span><span class="tag ${sm.cls}">${sm.text}</span></div>
+        <div class="hl-name">${l.name}</div>
+        <div class="hl-meta">${l.dur} · ${l.court} · ${l.students.length} 人</div>
+        <div class="hl-stu">学员 ${namesOf(l)}</div>
+      </div>`;
+    }).join('') || '<div class="muted" style="padding:8px">没有课次</div>';
+  }
+
+  bindRollChecks();
+  renderHours('all');
+  bindGroup('#hours-filter', btn => renderHours(btn.dataset.f));
 
   document.querySelectorAll('.star').forEach(s => {
     const render = v => {

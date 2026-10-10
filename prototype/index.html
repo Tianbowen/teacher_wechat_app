@@ -3,88 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>羽毛球课堂 · 原型演示</title>
+<title>已过期 · 请使用现行原型</title>
 <link rel="stylesheet" href="assets/style.css" />
-<style>
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 56px 24px; }
-  .head { text-align: center; margin-bottom: 40px; }
-  .head h1 { font-size: 34px; letter-spacing: 1px; }
-  .head p { color: var(--text-2); margin-top: 8px; }
-  .entries { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .entry { background: #fff; border-radius: 20px; padding: 26px; box-shadow: var(--shadow); text-decoration: none; color: inherit; transition: .2s; display: flex; flex-direction: column; gap: 10px; }
-  .entry:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(16, 24, 40, .1); }
-  .entry .ic { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-  .entry h3 { font-size: 18px; }
-  .entry ul { padding-left: 18px; color: var(--text-2); font-size: 13px; }
-  .phases { margin-top: 40px; }
-  .phases h2 { font-size: 20px; margin-bottom: 14px; }
-  .ph { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-  .ph .card { border-top: 4px solid var(--primary); }
-  .ph .card:nth-child(2) { border-color: var(--info); }
-  .ph .card:nth-child(3) { border-color: var(--accent); }
-  .ph .card:nth-child(4) { border-color: #7a4dff; }
-  .ph ul { padding-left: 16px; color: var(--text-2); font-size: 13px; margin-top: 6px; }
-  @media (max-width: 860px) { .entries, .ph { grid-template-columns: 1fr; } }
-</style>
 </head>
 <body>
-<div class="wrap">
-  <div class="head">
-    <div style="font-size:48px">🏸</div>
-    <h1>羽毛球课堂</h1>
-    <p>羽毛球教学俱乐部 · 学员与教练线上平台 · 高保真原型演示</p>
+<div style="max-width:640px;margin:80px auto;padding:0 24px">
+  <div class="card">
+    <div class="tag red">已过期</div>
+    <h1 style="margin:12px 0 8px">本目录不是现行演示</h1>
+    <p class="sub">`prototype/` 为旧稿（含上课提醒设置页、微信支付购买入口）。评审和演示请只用：</p>
+    <p style="margin:16px 0"><a class="btn" href="../Documents/原型/index.html">打开现行原型 Documents/原型</a></p>
+    <p class="muted">现行说明书：Documents/功能需求文档.md</p>
   </div>
-
-  <div class="entries">
-    <a class="entry" href="miniapp-student.html">
-      <div class="ic" style="background:var(--primary-light)">🙋</div>
-      <h3>学员端 · 微信小程序</h3>
-      <ul>
-        <li>首页：下节课、剩余课时</li>
-        <li>课表与在线约课 / 取消</li>
-        <li>教学视频、教练点评、心得分享</li>
-        <li>AI 助手：一句话约课</li>
-      </ul>
-      <span class="btn sm" style="align-self:flex-start">进入演示 →</span>
-    </a>
-    <a class="entry" href="miniapp-coach.html">
-      <div class="ic" style="background:var(--accent-light)">🧑‍🏫</div>
-      <h3>教练端 · 微信小程序</h3>
-      <ul>
-        <li>今日课程时间线、一键点名</li>
-        <li>手机快速排课、可约时段</li>
-        <li>学员课时余量、写点评</li>
-        <li>AI 助手：语音排课</li>
-      </ul>
-      <span class="btn sm" style="align-self:flex-start;background:var(--accent)">进入演示 →</span>
-    </a>
-    <a class="entry" href="web-admin.html">
-      <div class="ic" style="background:var(--info-light)">🖥️</div>
-      <h3>Web 管理后台</h3>
-      <ul>
-        <li>工作台数据看板</li>
-        <li>排课日历（按场地）、冲突检测</li>
-        <li>学员、课包、短信提醒、内容审核</li>
-        <li>AI 智能助手</li>
-      </ul>
-      <span class="btn sm" style="align-self:flex-start;background:var(--info)">进入演示 →</span>
-    </a>
-  </div>
-
-  <div class="phases">
-    <h2>建设分期</h2>
-    <div class="ph">
-      <div class="card"><b>一期 · MVP</b><span class="muted"> 8~10 周</span>
-        <ul><li>角色登录</li><li>排课 / 约课</li><li>签到消课</li><li>短信 + 订阅消息提醒</li></ul></div>
-      <div class="card"><b>二期 · 教学内容</b><span class="muted"> 6~8 周</span>
-        <ul><li>学习视频</li><li>课后点评</li><li>心得分享</li><li>微信支付</li></ul></div>
-      <div class="card"><b>三期 · 运营数据</b><span class="muted"> 4~6 周</span>
-        <ul><li>经营报表</li><li>续费预警</li><li>请假补课</li><li>多门店</li></ul></div>
-      <div class="card"><b>四期 · AI 智能体</b><span class="muted"> 6~8 周</span>
-        <ul><li>对话查课约课</li><li>智能排课建议</li><li>教学问答</li><li>经营问答</li></ul></div>
-    </div>
-  </div>
-  <p class="muted" style="text-align:center;margin-top:30px">原型数据均为演示数据 · 紫色「四期」标记为规划功能</p>
 </div>
 </body>
 </html>

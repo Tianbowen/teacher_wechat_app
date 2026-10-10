@@ -6,55 +6,134 @@
 <title>Web 管理后台 · 羽毛球课堂原型</title>
 <link rel="stylesheet" href="assets/style.css" />
 <style>
-  body { background: #f2f4f7; }
+  body { background: #eef2f6; }
   .layout { display: flex; min-height: 100vh; }
-  .side { width: 220px; background: #0f1d2e; color: #c4ccd8; flex-shrink: 0; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; }
-  .side .logo { height: 60px; display: flex; align-items: center; gap: 8px; padding: 0 20px; color: #fff; font-size: 18px; font-weight: 700; }
-  .side nav { flex: 1; padding: 8px 10px; overflow-y: auto; }
-  .side nav button { width: 100%; text-align: left; padding: 10px 12px; border-radius: 8px; margin-bottom: 2px; color: #c4ccd8; display: flex; align-items: center; gap: 10px; font-size: 14px; }
-  .side nav button:hover { background: rgba(255,255,255,.06); }
-  .side nav button.on { background: var(--primary); color: #fff; }
-  .side .foot { padding: 14px 20px; font-size: 12px; border-top: 1px solid rgba(255,255,255,.08); }
+  .side {
+    width: 232px; background: linear-gradient(180deg, #0c1926 0%, #102033 100%);
+    color: #c4ccd8; flex-shrink: 0; position: sticky; top: 0; height: 100vh;
+    display: flex; flex-direction: column;
+  }
+  .side .logo { height: 64px; display: flex; align-items: center; gap: 10px; padding: 0 18px; color: #fff; font-size: 16px; font-weight: 700; }
+  .logo-mark {
+    width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+    background: linear-gradient(135deg, #34c38f, #0b7d52);
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+  }
+  .side .venue { padding: 0 18px 14px; font-size: 12px; color: #8b99a8; }
+  .side nav { flex: 1; padding: 6px 12px; overflow-y: auto; }
+  .side nav button {
+    width: 100%; text-align: left; padding: 10px 12px; border-radius: 10px; margin-bottom: 4px;
+    color: #c4ccd8; display: flex; align-items: center; gap: 10px; font-size: 14px;
+  }
+  .side nav button:hover { background: rgba(255,255,255,.06); color: #fff; }
+  .side nav button.on { background: linear-gradient(135deg, #17b57a, #0b7d52); color: #fff; box-shadow: 0 8px 18px rgba(11,125,82,.28); }
+  .side .foot { padding: 14px 18px; font-size: 12px; border-top: 1px solid rgba(255,255,255,.08); }
   .side .foot a { color: #7dd3a8; text-decoration: none; }
   .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-  .top { height: 60px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; position: sticky; top: 0; z-index: 3; }
-  .content { padding: 20px 24px; }
+  .top {
+    height: 64px; background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border); display: flex; align-items: center;
+    justify-content: space-between; padding: 0 24px; position: sticky; top: 0; z-index: 3;
+  }
+  .venue-chip {
+    display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px;
+  }
+  .venue-chip i { width: 8px; height: 8px; border-radius: 50%; background: #12a06a; display: block; }
+  .user-chip {
+    display: flex; align-items: center; gap: 8px; background: #f4f6f8;
+    border-radius: 999px; padding: 4px 12px 4px 4px; font-size: 13px; color: var(--text-2);
+  }
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 10px; background: #f4f6f8;
+    display: inline-flex; align-items: center; justify-content: center; position: relative;
+  }
+  .content { padding: 22px 24px 32px; }
   .view { display: none; flex-direction: column; gap: 16px; }
   .view.on { display: flex; }
-  .h2 { font-size: 20px; font-weight: 700; }
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .stat .num { font-size: 28px; font-weight: 700; margin-top: 4px; }
+  .h2 { font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
+  .content .card {
+    border: 1px solid var(--border); border-radius: 16px; padding: 18px;
+    box-shadow: 0 1px 2px rgba(16,24,40,.04);
+  }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .stat .muted:first-child { font-size: 12px; }
+  .stat .num { font-size: 30px; font-weight: 750; margin: 6px 0 4px; letter-spacing: -.03em; }
   .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
   .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   table { width: 100%; border-collapse: collapse; }
-  th, td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
-  th { color: var(--text-3); font-weight: 500; background: #fafbfc; }
-  tr:hover td { background: #fafbfc; }
+  th, td { text-align: left; padding: 12px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  th { color: var(--text-3); font-weight: 500; background: #f8fafb; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafb; }
   .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .toolbar .input { width: 200px; }
+  .pkg-price { font-size: 22px; font-weight: 700; color: var(--accent); margin: 8px 0 6px; }
+  .todo-row { padding: 10px 0; }
+  .tpl { background: #f4f6f8; border-radius: 12px; padding: 12px 14px; font-size: 13px; line-height: 1.6; color: var(--text-2); }
   .bars { display: flex; align-items: flex-end; gap: 14px; height: 180px; padding-top: 10px; }
   .bars div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; color: var(--text-3); }
   .bars i { width: 100%; max-width: 36px; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, #34c38f, #12a06a); display: block; }
 
-  /* 排课日历 */
-  .cal { display: grid; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff; position: relative; }
-  .cal-head { display: contents; }
-  .cal-head div { background: #fafbfc; padding: 10px; text-align: center; font-weight: 600; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); }
-  .cal-time { font-size: 12px; color: var(--text-3); text-align: right; padding: 2px 8px 0 0; height: 30px; border-top: 1px dashed #f0f1f3; }
-  .cal-time.full { border-top: 1px solid var(--border); }
-  .cal-slot { height: 30px; border-left: 1px solid var(--border); border-top: 1px dashed #f0f1f3; }
+  /* 排课工具条 */
+  .sch-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .sch-bar {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    padding: 10px 14px; box-shadow: var(--shadow);
+  }
+  .sch-bar-group { display: flex; align-items: center; gap: 8px; }
+  .sch-bar-group + .sch-bar-group { padding-left: 12px; border-left: 1px solid var(--border); }
+  .sch-bar-label { font-size: 12px; color: var(--text-3); white-space: nowrap; }
+  .sch-seg { width: auto; flex: none; background: #f2f4f7; }
+  .sch-seg button { flex: none; padding: 7px 14px; white-space: nowrap; font-size: 13px; }
+  .sch-bar .input { width: 132px; height: 34px; padding: 0 10px; }
+  .sch-date {
+    display: flex; align-items: center; gap: 4px;
+    background: #f8fafb; border: 1px solid var(--border); border-radius: 10px; padding: 2px 4px 2px 2px;
+  }
+  .sch-date .nav { width: 30px; height: 30px; border-radius: 8px; font-size: 16px; color: var(--text-2); }
+  .sch-date .nav:hover { background: #fff; }
+  .sch-date #cal-label { min-width: 118px; text-align: center; font-size: 13px; font-weight: 600; padding: 0 6px; }
+  .sch-bar-actions { margin-left: auto; display: flex; gap: 8px; }
+
+  /* 排课日历：按列定位，课块不会撑出场地 */
+  .cal { display: flex; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff; min-height: 480px; }
+  .cal-time-col { width: 56px; flex-shrink: 0; background: #fafbfc; }
+  .cal-time-col .hd { height: 40px; border-bottom: 1px solid var(--border); }
+  .cal-time { font-size: 11px; color: var(--text-3); text-align: right; padding: 0 8px; height: 30px; line-height: 12px; box-sizing: border-box; border-top: 1px dashed #eef0f3; }
+  .cal-time.full { border-top: 1px solid var(--border); padding-top: 2px; }
+  .cal-col { flex: 1; min-width: 0; display: flex; flex-direction: column; border-left: 1px solid var(--border); }
+  .cal-col-head { height: 40px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; background: #fafbfc; border-bottom: 1px solid var(--border); }
+  .cal-col-body { position: relative; flex: 1; }
+  .cal-slot { height: 30px; box-sizing: border-box; border-top: 1px dashed #eef0f3; }
   .cal-slot.full { border-top: 1px solid var(--border); }
   .cal-slot.over { background: var(--primary-light); }
   .cal-slot:hover { background: #f7fdf9; cursor: copy; }
-  .ev { position: absolute; border-radius: 8px; padding: 6px 8px; font-size: 12px; color: #fff; cursor: grab; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,.12); border-left: 4px solid rgba(0,0,0,.2); }
-  .ev b { display: block; font-size: 13px; }
-  .ev.c-green { background: #12a06a; }
-  .ev.c-orange { background: #f08a24; }
-  .ev.c-blue { background: #2f6bff; }
-  .ev.c-purple { background: #7a4dff; }
-  .ev.dragging { opacity: .5; }
+  .ev {
+    position: absolute; left: 5px; right: 5px; width: auto;
+    border-radius: 8px; padding: 5px 8px; color: #fff; cursor: pointer;
+    overflow: hidden; box-sizing: border-box;
+    box-shadow: 0 4px 10px rgba(16, 24, 40, .12);
+    display: flex; flex-direction: column; gap: 1px;
+  }
+  .ev:hover { filter: brightness(1.05); z-index: 2; }
+  .ev-title { font-size: 12px; font-weight: 700; line-height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ev-time { font-size: 11px; line-height: 16px; opacity: .92; }
+  .ev-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 12px; line-height: 18px; margin-top: auto; flex-shrink: 0; }
+  .ev-coach { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .ev-dur { background: rgba(255,255,255,.22); border-radius: 999px; padding: 0 6px; font-size: 10px; line-height: 16px; flex-shrink: 0; white-space: nowrap; }
+  .ev-sm .ev-time { display: none; }
+  .ev-sm .ev-coach { font-size: 12px; }
+  .ev.c-green { background: linear-gradient(180deg, #22b87a, #0f9a64); }
+  .ev.c-orange { background: linear-gradient(180deg, #ff9d3d, #e57a12); }
+  .ev.c-blue { background: linear-gradient(180deg, #5b8dff, #2f6bff); }
+  .ev.c-purple { background: linear-gradient(180deg, #9b78ff, #7a4dff); }
+  .ev.draft { opacity: .7; box-shadow: none; outline: 1px dashed rgba(255,255,255,.85); }
+  .ev.dragging { opacity: .45; }
   .legend { display: flex; gap: 14px; font-size: 12px; color: var(--text-2); }
   .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+  .cal.month-list { display: block; min-height: 0; }
+  .month-hint { padding: 18px 16px; color: var(--text-3); font-size: 13px; background: #fafbfc; }
 
   .modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; align-items: center; justify-content: center; z-index: 20; }
   .modal-mask.on { display: flex; }
@@ -71,12 +150,21 @@
   .switch::after { content: ""; position: absolute; right: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: .15s; }
   .switch.off { background: #d0d5dd; }
   .switch.off::after { right: 19px; }
+  .occ { height: 8px; background: #eef1f4; border-radius: 4px; overflow: hidden; min-width: 80px; }
+  .occ i { display: block; height: 100%; background: var(--primary); }
+  .occ.warn i { background: var(--accent); }
+  .occ.full i { background: var(--danger); }
+  .lesson-kvs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+  .lesson-kvs .k { font-size: 12px; color: var(--text-3); }
+  .lesson-kvs .v { font-size: 14px; font-weight: 600; }
+  .stat-note { font-size: 12px; color: var(--text-3); margin-top: 4px; }
 </style>
 </head>
 <body>
 <div class="layout">
   <aside class="side">
-    <div class="logo">🏸 羽毛球课堂</div>
+    <div class="logo"><span class="logo-mark">🏸</span>羽毛球课堂</div>
+    <div class="venue">深职大 · 留仙洞校区</div>
     <nav id="menu">
       <button data-v="dash" class="on">📊 工作台</button>
       <button data-v="schedule">🗓️ 排课中心</button>
@@ -84,7 +172,7 @@
       <button data-v="coaches">🧑‍🏫 教练管理</button>
       <button data-v="packages">💳 课包管理</button>
       <button data-v="messages">📩 消息提醒</button>
-      <button data-v="content">🎬 内容管理</button>
+      <button data-v="content">🎬 内容管理 <span class="phase p3">三期</span></button>
       <button data-v="ai">🤖 智能助手 <span class="phase">四期</span></button>
       <button data-v="settings">⚙️ 系统设置</button>
     </nav>
@@ -93,11 +181,11 @@
 
   <main class="main">
     <header class="top">
-      <div class="row" style="font-weight:bold;font-size:16px">深职大</div>
-      <div class="row" style="gap:18px">
-        <button class="sub" onclick="switchView('ai')">🤖 问问 AI</button>
-        <span class="sub">🔔 <span class="tag red">3</span></span>
-        <div class="row"><div class="avatar sm orange">王</div><span class="sub">王建国（馆长）</span></div>
+      <div class="venue-chip"><i></i>深职大体育馆</div>
+      <div class="row" style="gap:10px">
+        <button class="btn ghost square sm" onclick="switchView('ai')">🤖 问问 AI</button>
+        <button class="icon-btn" title="通知">🔔<span class="tag red" style="position:absolute;top:-4px;right:-4px">3</span></button>
+        <div class="user-chip"><div class="avatar sm orange">王</div>王建国 · 馆长</div>
         <a class="sub" href="web-login.html" style="text-decoration:none">退出</a>
       </div>
     </header>
@@ -105,7 +193,13 @@
     <div class="content">
       <!-- 工作台 -->
       <section class="view on" id="v-dash">
-        <div class="between"><div class="h2">工作台</div><span class="muted">2026年9月24日 周四</span></div>
+        <div class="sch-head">
+          <div>
+            <div class="h2">工作台</div>
+            <div class="muted" style="margin-top:4px">今日运营一览 · 单场馆</div>
+          </div>
+          <span class="muted">2026年9月24日 周四</span>
+        </div>
         <div class="stats">
           <div class="card stat"><div class="muted">今日课程</div><div class="num">18</div><div class="muted">已完成 6 · 进行中 2</div></div>
           <div class="card stat"><div class="muted">今日签到率</div><div class="num" style="color:var(--primary)">94%</div><div class="muted">较上周 ↑ 3%</div></div>
@@ -128,9 +222,9 @@
           <div class="col" style="gap:16px">
             <div class="card">
               <div class="title" style="margin-bottom:6px">待办事项</div>
-              <div class="list-item"><span class="tag red">退费</span><span class="grow sub">刘女士申请退费 8 课时</span><button class="btn sm line" onclick="toast('已审批通过，退款 1,280 元')">审批</button></div>
-              <div class="list-item"><span class="tag orange">审核</span><span class="grow sub">2 条心得待人工复核</span><button class="btn sm line" onclick="switchView('content')">处理</button></div>
-              <div class="list-item"><span class="tag blue">续费</span><span class="grow sub">9 位学员课时 ≤ 3</span><button class="btn sm line" onclick="switchView('students')">查看</button></div>
+              <div class="list-item todo-row"><span class="tag red">退费</span><span class="grow sub">刘女士申请退费 8 课时</span><button class="btn sm line" onclick="toast('已审批通过，退款 1,280 元')">审批</button></div>
+              <div class="list-item todo-row"><span class="tag orange">审核</span><span class="grow sub">2 条心得待人工复核 <span class="phase p3">三期</span></span><button class="btn sm line" onclick="switchView('content')">处理</button></div>
+              <div class="list-item todo-row"><span class="tag blue">续费</span><span class="grow sub">9 位学员课时 ≤ 3 <span class="phase p2">二期预警</span></span><button class="btn sm line" onclick="switchView('students')">查看</button></div>
             </div>
             <div class="card">
               <div class="title" style="margin-bottom:6px">今日提醒发送</div>
@@ -144,34 +238,91 @@
 
       <!-- 排课中心 -->
       <section class="view" id="v-schedule">
-        <div class="between">
+        <div class="sch-head">
           <div class="h2">排课中心</div>
-          <div class="toolbar">
-            <div class="seg" id="seg-calmode" style="width:180px"><button class="on">按场地</button><button onclick="toast('按教练分列：王建国 / 李婷 / 陈浩 / 赵磊')">按教练</button></div>
-            <div class="seg" style="width:180px" id="seg-calrange"><button class="on">日</button><button onclick="toast('周视图：7 天 × 场地')">周</button><button onclick="toast('月视图')">月</button></div>
-            <button class="btn line square sm">‹</button><span class="bold">9月24日 周四</span><button class="btn line square sm">›</button>
-            <button class="btn line square" onclick="toast('已将上周课表复制到本周：新增 42 节，跳过冲突 3 节')">复制上周</button>
+          <div class="sch-bar-actions">
+            <button class="btn line square" onclick="toast('复制课表为二期，一期请逐节排课或用周期排课')">复制上周 <span class="phase p2">二期</span></button>
             <button class="btn square" onclick="openModal()">＋ 新建课程</button>
           </div>
         </div>
+        <div class="sch-bar">
+          <div class="sch-bar-group">
+            <span class="sch-bar-label">排列</span>
+            <div class="seg sch-seg" id="seg-calmode"><button class="on" data-v="court">按场地</button><button data-v="coach">按教练</button></div>
+          </div>
+          <div class="sch-bar-group">
+            <span class="sch-bar-label">周期</span>
+            <div class="seg sch-seg" id="seg-calrange"><button class="on" data-v="day">日</button><button data-v="week">周</button><button data-v="month">月</button></div>
+          </div>
+          <div class="sch-bar-group">
+            <span class="sch-bar-label">教练</span>
+            <select class="input" id="coach-filter">
+              <option value="">全部教练</option>
+              <option>王建国</option>
+              <option>李婷</option>
+              <option>陈浩</option>
+              <option>赵磊</option>
+            </select>
+          </div>
+          <div class="sch-bar-group">
+            <span class="sch-bar-label">日期</span>
+            <div class="sch-date">
+              <button class="nav" onclick="shiftCal(-1)" aria-label="上一段">‹</button>
+              <span id="cal-label">9月24日 周四</span>
+              <button class="nav" onclick="shiftCal(1)" aria-label="下一段">›</button>
+            </div>
+          </div>
+        </div>
+        <div class="stats" id="sch-stats"></div>
         <div class="between">
           <div class="legend"><span><i style="background:#12a06a"></i>班课</span><span><i style="background:#2f6bff"></i>私教</span><span><i style="background:#f08a24"></i>青少年</span><span><i style="background:#7a4dff"></i>体验课</span></div>
-          <span class="muted">💡 拖动课程块可调整时间 / 场地，系统自动检测冲突并通知学员；点击空白格快速新建</span>
+          <span class="muted">点击课块看学员名单与时长 · 拖动可调时间/场地 · 单场馆 · 不含课酬与收入</span>
         </div>
         <div class="cal" id="cal"></div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="between" style="margin-bottom:10px"><span class="title">教练课时</span><span class="muted" id="coach-stat-scope">本区间</span></div>
+            <table id="tbl-coach-stat"></table>
+            <div class="stat-note">已完成 = 已结算课次；已排含待上。不计算课酬或收入。</div>
+          </div>
+          <div class="card">
+            <div class="between" style="margin-bottom:10px"><span class="title">场地占用</span><span class="muted">营业 08:00–22:00</span></div>
+            <table id="tbl-court-stat"></table>
+            <div class="stat-note">占用率 = 已排时长 ÷ 当日可排时长（14 小时 × 天数）。5 号场维护中不计入。</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="between" style="margin-bottom:10px">
+            <span class="title">课次明细</span>
+            <button class="btn sm line" onclick="toast('已导出当前筛选课次.xlsx')">导出</button>
+          </div>
+          <table id="tbl-lessons"></table>
+        </div>
       </section>
 
       <!-- 学员 -->
       <section class="view" id="v-students">
-        <div class="between"><div class="h2">学员管理</div>
-          <div class="toolbar"><button class="btn line square" onclick="toast('已导出 学员列表.xlsx')">导出 Excel</button><button class="btn line square" onclick="toast('下载导入模板')">批量导入</button><button class="btn square" onclick="toast('新增学员表单')">＋ 新增学员</button></div></div>
-        <div class="card">
-          <div class="toolbar" style="margin-bottom:12px">
-            <input class="input" placeholder="姓名 / 手机号" />
-            <select class="input" style="width:140px"><option>全部教练</option><option>王建国</option><option>李婷</option><option>陈浩</option></select>
-            <select class="input" style="width:140px"><option>全部状态</option><option>课时不足</option><option>即将到期</option><option>已流失</option></select>
-            <button class="btn square sm">查询</button>
+        <div class="sch-head">
+          <div class="h2">学员管理</div>
+          <div class="sch-bar-actions">
+            <button class="btn line square" onclick="toast('已导出 学员列表.xlsx')">导出 Excel</button>
+            <button class="btn line square" onclick="toast('下载导入模板')">批量导入</button>
+            <button class="btn square" onclick="toast('新增学员表单')">＋ 新增学员</button>
           </div>
+        </div>
+        <div class="sch-bar">
+          <div class="sch-bar-group"><span class="sch-bar-label">搜索</span><input class="input" placeholder="姓名 / 手机号" style="width:200px" /></div>
+          <div class="sch-bar-group"><span class="sch-bar-label">教练</span>
+            <select class="input"><option>全部教练</option><option>王建国</option><option>李婷</option><option>陈浩</option></select>
+          </div>
+          <div class="sch-bar-group"><span class="sch-bar-label">状态</span>
+            <select class="input"><option>全部状态</option><option>课时不足</option><option>即将到期</option><option>已流失</option></select>
+          </div>
+          <button class="btn square sm">查询</button>
+        </div>
+        <div class="card">
           <table>
             <tr><th>学员</th><th>手机号</th><th>等级</th><th>负责教练</th><th>课包</th><th>剩余课时</th><th>最近上课</th><th>操作</th></tr>
             <tr><td><div class="row"><div class="avatar sm">乐</div>林小乐</div></td><td>138****6621</td><td>L3</td><td>王建国</td><td>青少年 48 次卡</td><td><b>12</b></td><td>9/22</td><td><button class="btn sm ghost" onclick="openDrawer()">详情</button></td></tr>
@@ -187,8 +338,9 @@
 
       <!-- 教练 -->
       <section class="view" id="v-coaches">
-        <div class="between"><div class="h2">教练管理</div>
-          <div class="toolbar">
+        <div class="sch-head">
+          <div class="h2">教练管理</div>
+          <div class="sch-bar-actions">
             <button class="btn line square" onclick="toast('已导出教练账号列表.xlsx')">导出</button>
             <button class="btn square" onclick="openCoachModal()">＋ 添加教练</button>
           </div>
@@ -196,10 +348,10 @@
         <div class="grid-3">
           <div class="card col"><div class="row"><div class="avatar orange">王</div><div class="grow"><div class="bold">王建国 <span class="tag orange">主教练</span> <span class="tag green">启用</span></div><div class="muted">139****8801 · 国家一级运动员</div></div></div>
             <div class="between sub"><span>本月课时</span><b>68</b></div><div class="between sub"><span>带学员</span><b>32</b></div><div class="between sub"><span>Web 账号</span><b>已开通</b></div>
-            <div class="row"><button class="btn sm line" onclick="switchView('schedule')">查看课表</button><button class="btn sm line" onclick="toast('临时密码已发送至 139****8801')">重置密码</button></div></div>
+            <div class="row"><button class="btn sm line" onclick="openCoachSchedule('王建国')">查看课表</button><button class="btn sm line" onclick="toast('临时密码已发送至 139****8801')">重置密码</button></div></div>
           <div class="card col"><div class="row"><div class="avatar blue">李</div><div class="grow"><div class="bold">李婷 <span class="tag green">启用</span></div><div class="muted">138****2209 · 青少年启蒙</div></div></div>
             <div class="between sub"><span>本月课时</span><b>54</b></div><div class="between sub"><span>带学员</span><b>28</b></div><div class="between sub"><span>Web 账号</span><b>已开通</b></div>
-            <div class="row"><button class="btn sm line" onclick="switchView('schedule')">查看课表</button><button class="btn sm line" onclick="toast('临时密码已发送至 138****2209')">重置密码</button></div></div>
+            <div class="row"><button class="btn sm line" onclick="openCoachSchedule('李婷')">查看课表</button><button class="btn sm line" onclick="toast('临时密码已发送至 138****2209')">重置密码</button></div></div>
           <div class="card col"><div class="row"><div class="avatar">陈</div><div class="grow"><div class="bold">陈浩 <span class="tag gray">停用</span></div><div class="muted">137****6610 · 成人双打</div></div></div>
             <div class="between sub"><span>本月课时</span><b>47</b></div><div class="between sub"><span>带学员</span><b>35</b></div><div class="between sub"><span>Web 账号</span><b>已停用</b></div>
             <div class="row"><button class="btn sm line" onclick="toast('已重新启用陈浩账号')">启用账号</button><button class="btn sm line" onclick="toast('临时密码已发送至 137****6610')">重置密码</button></div></div>
@@ -219,11 +371,16 @@
 
       <!-- 课包 -->
       <section class="view" id="v-packages">
-        <div class="between"><div class="h2">课包管理</div><div class="toolbar"><button class="btn square" onclick="toast('选择学员 → 选择课包 → 填写收款方式/凭证 → 确认开通并记录流水')">＋ 手动开通课包</button></div></div>
+        <div class="sch-head">
+          <div class="h2">课包管理</div>
+          <div class="sch-bar-actions">
+            <button class="btn square" onclick="toast('选择学员 → 选择课包 → 填写收款方式/凭证 → 确认开通并记录流水')">＋ 手动开通课包</button>
+          </div>
+        </div>
         <div class="grid-3">
-          <div class="card"><div class="between"><b>青少年 48 次卡</b><span class="tag green">可开通</span></div><div class="title" style="color:var(--accent);margin:6px 0">¥ 5,760</div><div class="muted">120 元/课时 · 有效期 12 个月 · 适用青少年班课 · 线下收款后开通</div></div>
-          <div class="card"><div class="between"><b>成人 20 次卡</b><span class="tag green">可开通</span></div><div class="title" style="color:var(--accent);margin:6px 0">¥ 3,200</div><div class="muted">160 元/课时 · 有效期 6 个月 · 适用成人班课 · 线下收款后开通</div></div>
-          <div class="card"><div class="between"><b>私教 10 次卡</b><span class="tag green">可开通</span></div><div class="title" style="color:var(--accent);margin:6px 0">¥ 4,000</div><div class="muted">400 元/次（2 课时） · 有效期 6 个月 · 线下收款后开通</div></div>
+          <div class="card"><div class="between"><b>青少年 48 次卡</b><span class="tag green">可开通</span></div><div class="pkg-price">¥ 5,760</div><div class="muted">120 元/课时 · 有效期 12 个月 · 适用青少年班课 · 线下收款后开通</div></div>
+          <div class="card"><div class="between"><b>成人 20 次卡</b><span class="tag green">可开通</span></div><div class="pkg-price">¥ 3,200</div><div class="muted">160 元/课时 · 有效期 6 个月 · 适用成人班课 · 线下收款后开通</div></div>
+          <div class="card"><div class="between"><b>私教 10 次卡</b><span class="tag green">可开通</span></div><div class="pkg-price">¥ 4,000</div><div class="muted">400 元/次（2 课时） · 有效期 6 个月 · 线下收款后开通</div></div>
         </div>
         <div class="card">
           <div class="title" style="margin-bottom:10px">最近开通记录</div>
@@ -238,7 +395,7 @@
 
       <!-- 消息 -->
       <section class="view" id="v-messages">
-        <div class="h2">消息提醒</div>
+        <div class="sch-head"><div class="h2">消息提醒</div></div>
         <div class="grid-2">
           <div class="card">
             <div class="title" style="margin-bottom:10px">提醒规则</div>
@@ -247,7 +404,7 @@
               <tr><td>上课提醒（前一天）</td><td>开课前一天 20:00</td><td>订阅消息 + 短信</td><td><span class="switch"></span></td></tr>
               <tr><td>上课提醒（当天）</td><td>开课前 2 小时</td><td>短信</td><td><span class="switch"></span></td></tr>
               <tr><td>调课 / 取消通知</td><td>即时</td><td>订阅消息 + 短信</td><td><span class="switch"></span></td></tr>
-              <tr><td>候补成功</td><td>即时</td><td>订阅消息 + 短信</td><td><span class="switch"></span></td></tr>
+              <tr><td>候补成功 <span class="phase p2">二期</span></td><td>即时</td><td>订阅消息 + 短信</td><td><span class="tag gray">未启用</span></td></tr>
               <tr><td>课时不足</td><td>剩余 ≤ 3 课时</td><td>订阅消息</td><td><span class="switch"></span></td></tr>
               <tr><td>课包到期</td><td>到期前 7 天</td><td>短信</td><td><span class="switch off"></span></td></tr>
               <tr><td>教练每日课表</td><td>每天 07:30</td><td>订阅消息</td><td><span class="switch"></span></td></tr>
@@ -257,9 +414,9 @@
           <div class="card">
             <div class="between" style="margin-bottom:10px"><span class="title">短信模板</span><span class="tag green">已审核</span></div>
             <div class="sub" style="margin-bottom:6px">上课提醒 · SMS_2026001</div>
-            <div style="background:#f2f4f7;border-radius:10px;padding:12px;font-size:13px">【羽毛球课堂】${name}您好，您预约的${course}将于${time}在${venue}${court}开始，教练${coach}。如需取消请提前12小时在小程序操作。</div>
+            <div class="tpl">【羽毛球课堂】${name}您好，您预约的${course}将于${time}在${venue}${court}开始，教练${coach}。如需取消请提前12小时在小程序操作。</div>
             <div class="sub" style="margin:12px 0 6px">调课通知 · SMS_2026002</div>
-            <div style="background:#f2f4f7;border-radius:10px;padding:12px;font-size:13px">【羽毛球课堂】${name}您好，您的${course}已调整至${time}，场地${court}。如有疑问请联系教练${coach}。</div>
+            <div class="tpl">【羽毛球课堂】${name}您好，您的${course}已调整至${time}，场地${court}。如有疑问请联系教练${coach}。</div>
             <button class="btn sm line" style="margin-top:12px" onclick="toast('测试短信已发送到 138****6621')">发送测试短信</button>
           </div>
         </div>
@@ -276,8 +433,18 @@
 
       <!-- 内容 -->
       <section class="view" id="v-content">
-        <div class="between"><div class="h2">内容管理</div><button class="btn square" onclick="toast('上传教学视频：选择文件 → 分类 → 可见范围')">＋ 上传教学视频</button></div>
-        <div class="seg" style="width:360px" id="seg-content"><button class="on">待审核 2</button><button>教学视频 42</button><button>心得 186</button></div>
+        <div class="sch-head">
+          <div class="h2">内容管理 <span class="phase p3">三期</span></div>
+          <div class="sch-bar-actions">
+            <button class="btn square" onclick="toast('上传教学视频：选择文件 → 分类 → 可见范围')">＋ 上传教学视频</button>
+          </div>
+        </div>
+        <div class="sch-bar">
+          <div class="sch-bar-group">
+            <span class="sch-bar-label">类型</span>
+            <div class="seg sch-seg" id="seg-content"><button class="on">待审核 2</button><button>教学视频 42</button><button>心得 186</button></div>
+          </div>
+        </div>
         <div class="card">
           <table>
             <tr><th>内容</th><th>作者</th><th>类型</th><th>机器审核</th><th>提交时间</th><th>操作</th></tr>
@@ -292,7 +459,7 @@
 
       <!-- AI -->
       <section class="view" id="v-ai">
-        <div class="h2">智能助手 <span class="phase">四期</span></div>
+        <div class="sch-head"><div class="h2">智能助手 <span class="phase">四期</span></div></div>
         <div class="ai-wrap">
           <div class="ai-box">
             <div class="chat" id="chat"></div>
@@ -314,7 +481,7 @@
 
       <!-- 设置 -->
       <section class="view" id="v-settings">
-        <div class="h2">系统设置</div>
+        <div class="sch-head"><div class="h2">系统设置</div></div>
         <div class="grid-2">
           <div class="card">
             <div class="title" style="margin-bottom:10px">预约规则</div>
@@ -322,7 +489,6 @@
               <div class="form-item"><label>免费取消时限（开课前）</label><input class="input" value="12 小时" /></div>
               <div class="form-item"><label>预约开放（提前）</label><input class="input" value="7 天" /></div>
               <div class="form-item"><label>缺席处理</label><select class="input"><option>扣 1 课时</option><option>不扣</option></select></div>
-              <div class="form-item"><label>请假是否扣课时</label><select class="input"><option>不扣（每月限 2 次）</option><option>扣</option></select></div>
               <div class="form-item"><label>小班最少开课人数</label><input class="input" value="2 人" /></div>
               <div class="form-item"><label>人数不足自动取消（开课前）</label><input class="input" value="6 小时" /></div>
             </div>
@@ -366,7 +532,8 @@
     </div>
     <div class="form-item"><label>指定学员（可选）</label><input class="input" placeholder="搜索并添加学员，固定班可直接生成预约" /></div>
     <div id="f-conflict" class="hidden" style="background:var(--danger-light);color:var(--danger);padding:10px 12px;border-radius:10px;margin-bottom:12px"></div>
-    <div class="row" style="justify-content:flex-end"><button class="btn line square" onclick="closeModal()">取消</button><button class="btn square" onclick="createLesson()">发布课程</button></div>
+    <div class="muted" style="margin-bottom:10px">周期重复仅 Web 可用。先保存草稿不通知学员；校验通过后再发布。</div>
+    <div class="row" style="justify-content:flex-end"><button class="btn line square" onclick="closeModal()">取消</button><button class="btn line square" onclick="createLesson(false)">保存草稿</button><button class="btn square" onclick="createLesson(true)">发布课程</button></div>
   </div>
 </div>
 
@@ -384,9 +551,54 @@
     <div><div class="bold" style="margin-bottom:6px">近期上课</div>
       <div class="list-item"><span class="grow sub">9/22 青少年进阶班 · 王建国</span><span class="tag green">已签到</span></div>
       <div class="list-item"><span class="grow sub">9/19 一对一私教 · 李婷</span><span class="tag green">已签到</span></div>
-      <div class="list-item"><span class="grow sub">9/10 青少年进阶班 · 王建国</span><span class="tag red">缺席</span></div></div>
+      <div class="list-item"><span class="grow sub">9/10 青少年进阶班 · 王建国</span><span class="tag red">缺席</span><button class="btn sm line" onclick="openCorrect(10)">更正</button></div></div>
     <div><div class="bold" style="margin-bottom:6px">教练点评</div>
       <div class="sub">“今天正手杀球发力比上周好很多，注意击球后快速回位。”— 王建国 9/22</div></div>
+  </div>
+</div>
+
+<!-- 课次详情抽屉 -->
+<div class="drawer-mask" id="lesson-drawer" onclick="if(event.target===this)this.classList.remove('on')">
+  <div class="drawer">
+    <div class="between"><span class="title" id="ld-title">课次详情</span><button onclick="document.getElementById('lesson-drawer').classList.remove('on')">✕</button></div>
+    <div id="ld-body"></div>
+  </div>
+</div>
+
+<!-- 调课确认 -->
+<div class="modal-mask" id="reschedule-modal">
+  <div class="modal">
+    <div class="between" style="margin-bottom:14px"><span class="title">调课确认</span><button onclick="closeReschedule()">✕</button></div>
+    <div class="muted" style="margin-bottom:10px" id="rs-summary"></div>
+    <div class="grid2">
+      <div class="form-item"><label>新场地</label><select class="input" id="rs-court"><option value="0">1 号场</option><option value="1">2 号场</option><option value="2">3 号场</option><option value="3">4 号场</option></select></div>
+      <div class="form-item"><label>新开始时间</label><select class="input" id="rs-start"></select></div>
+    </div>
+    <div id="rs-students" style="margin-bottom:12px"></div>
+    <div id="rs-conflict" class="hidden" style="background:var(--danger-light);color:var(--danger);padding:10px 12px;border-radius:10px;margin-bottom:12px"></div>
+    <div class="row" style="justify-content:flex-end"><button class="btn line square" onclick="closeReschedule()">放弃</button><button class="btn square" onclick="confirmReschedule()">确认调课并通知</button></div>
+  </div>
+</div>
+
+<!-- 取消课次 -->
+<div class="modal-mask" id="cancel-modal">
+  <div class="modal">
+    <div class="between" style="margin-bottom:14px"><span class="title">取消课次</span><button onclick="document.getElementById('cancel-modal').classList.remove('on')">✕</button></div>
+    <div class="form-item"><label>原因</label><select class="input" id="cx-reason"><option>教练临时有事</option><option>场地维护</option><option>人数不足</option><option>其他</option></select></div>
+    <div class="muted" style="margin-bottom:12px" id="cx-note"></div>
+    <div class="row" style="justify-content:flex-end"><button class="btn line square" onclick="document.getElementById('cancel-modal').classList.remove('on')">返回</button><button class="btn square" onclick="confirmCancelLesson()">确认取消并通知</button></div>
+  </div>
+</div>
+
+<!-- 更正点名 -->
+<div class="modal-mask" id="correct-modal">
+  <div class="modal">
+    <div class="between" style="margin-bottom:14px"><span class="title">更正点名 / 消课</span><button onclick="document.getElementById('correct-modal').classList.remove('on')">✕</button></div>
+    <div class="muted" style="margin-bottom:10px">原流水保留，用冲正流水修复。须填写原因。</div>
+    <div class="form-item"><label>学员</label><select class="input" id="cr-stu"></select></div>
+    <div class="form-item"><label>更正为</label><select class="input" id="cr-st"><option>已签到</option><option>请假</option><option>缺席</option></select></div>
+    <div class="form-item"><label>原因</label><input class="input" id="cr-reason" value="家长来电说明迟到误记缺席" /></div>
+    <div class="row" style="justify-content:flex-end"><button class="btn line square" onclick="document.getElementById('correct-modal').classList.remove('on')">取消</button><button class="btn square" onclick="confirmCorrect()">提交更正</button></div>
   </div>
 </div>
 
@@ -433,50 +645,320 @@
 
   /* ---------- 排课日历 ---------- */
   const COURTS = ['1 号场', '2 号场', '3 号场', '4 号场'];
+  const COACHES = ['王建国', '李婷', '陈浩', '赵磊'];
+  const WEEKDAYS = ['一', '二', '三', '四', '五', '六', '日'];
   const START_H = 8, END_H = 22, SLOT_H = 30, TIME_W = 64;
+  const OPEN_H = END_H - START_H;
+  const calState = { mode: 'court', range: 'day', cursor: new Date(2026, 8, 24), coach: '' };
+
+  function ymd(d) {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+  function parseYmd(s) {
+    const [y, m, d] = s.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+  function startOfWeek(d) {
+    const x = new Date(d);
+    const day = x.getDay() || 7;
+    x.setDate(x.getDate() - day + 1);
+    x.setHours(0, 0, 0, 0);
+    return x;
+  }
+  function addDays(d, n) {
+    const x = new Date(d);
+    x.setDate(x.getDate() + n);
+    return x;
+  }
+  function dateLabel(d) {
+    return `${d.getMonth() + 1}月${d.getDate()}日`;
+  }
+  function durLabel(h) {
+    return h === 1 ? '1 小时' : (h === 2 ? '2 小时' : `${h} 小时`);
+  }
+  function statusTag(st) {
+    if (st === 'draft') return '<span class="tag gray">草稿</span>';
+    if (st === 'done') return '<span class="tag gray">已完成</span>';
+    if (st === 'live') return '<span class="tag orange">进行中</span>';
+    return '<span class="tag green">待上课</span>';
+  }
+  function studentNames(l) {
+    return (l.students || []).map(s => s.name).join('、') || '—';
+  }
+  function cntOf(l) {
+    const n = (l.students || []).length;
+    return `${n}/${l.cap}`;
+  }
+
   let lessons = [
-    { id: 1, name: '一对一私教 · 周涵', coach: '王建国', court: 0, start: 9, dur: 1, cls: 'c-blue', cnt: '1/1' },
-    { id: 2, name: '青少年启蒙班', coach: '李婷', court: 2, start: 10, dur: 1.5, cls: 'c-orange', cnt: '6/8' },
-    { id: 3, name: '成人小班', coach: '王建国', court: 1, start: 15, dur: 1.5, cls: 'c-green', cnt: '4/6' },
-    { id: 4, name: '体验课', coach: '陈浩', court: 3, start: 16, dur: 1, cls: 'c-purple', cnt: '3/4' },
-    { id: 5, name: '青少年进阶班', coach: '王建国', court: 2, start: 18.5, dur: 1.5, cls: 'c-orange', cnt: '5/6' },
-    { id: 6, name: '成人提高班', coach: '陈浩', court: 1, start: 19, dur: 1.5, cls: 'c-green', cnt: '6/6' },
-    { id: 7, name: '一对一私教 · 张睿', coach: '王建国', court: 0, start: 20, dur: 1, cls: 'c-blue', cnt: '1/1' },
-    { id: 8, name: '一对一私教 · 李佳', coach: '李婷', court: 0, start: 14, dur: 1, cls: 'c-blue', cnt: '1/1' },
+    { id: 1, name: '一对一私教', coach: '王建国', court: 0, date: '2026-09-24', start: 9, dur: 1, cls: 'c-blue', cap: 1, status: 'done',
+      students: [{ name: '周涵', tag: 'L3', st: '已签到' }] },
+    { id: 2, name: '青少年启蒙班', coach: '李婷', court: 2, date: '2026-09-24', start: 10, dur: 1.5, cls: 'c-orange', cap: 8, status: 'done',
+      students: [{ name: '赵可欣', tag: 'L1', st: '已签到' }, { name: '孙浩', tag: 'L1', st: '已签到' }, { name: '陈可', tag: 'L2', st: '已签到' }, { name: '吴敏', tag: 'L1', st: '已签到' }, { name: '何雨', tag: 'L1', st: '已签到' }, { name: '丁一', tag: 'L2', st: '请假' }] },
+    { id: 3, name: '成人小班', coach: '王建国', court: 1, date: '2026-09-24', start: 15, dur: 1.5, cls: 'c-green', cap: 6, status: 'live',
+      students: [{ name: '刘一鸣', tag: 'L2', st: '已签到' }, { name: '王明', tag: 'L3', st: '已签到' }, { name: '钱芳', tag: 'L2', st: '已签到' }, { name: '赵磊家长', tag: 'L2', st: '未到' }] },
+    { id: 4, name: '体验课', coach: '陈浩', court: 3, date: '2026-09-24', start: 16, dur: 1, cls: 'c-purple', cap: 4, status: 'live',
+      students: [{ name: '体验·林晨', tag: '新', st: '已签到' }, { name: '体验·周琪', tag: '新', st: '已签到' }, { name: '体验·马宁', tag: '新', st: '未到' }] },
+    { id: 5, name: '青少年进阶班', coach: '王建国', court: 2, date: '2026-09-24', start: 18.5, dur: 1.5, cls: 'c-orange', cap: 6, status: 'todo',
+      students: [{ name: '林小乐', tag: 'L3', st: '已预约' }, { name: '张睿', tag: 'L4', st: '已预约' }, { name: '王明', tag: 'L3', st: '已预约' }, { name: '刘一鸣', tag: 'L2', st: '已预约' }, { name: '周涵', tag: 'L3', st: '已预约' }] },
+    { id: 6, name: '成人提高班', coach: '陈浩', court: 1, date: '2026-09-24', start: 19, dur: 1.5, cls: 'c-green', cap: 6, status: 'todo',
+      students: [{ name: '孙浩', tag: 'L2', st: '已预约' }, { name: '钱芳', tag: 'L2', st: '已预约' }, { name: '何雨', tag: 'L1', st: '已预约' }, { name: '丁一', tag: 'L2', st: '已预约' }, { name: '吴敏', tag: 'L1', st: '已预约' }, { name: '陈可', tag: 'L2', st: '已预约' }] },
+    { id: 7, name: '一对一私教', coach: '王建国', court: 0, date: '2026-09-24', start: 20, dur: 1, cls: 'c-blue', cap: 1, status: 'todo',
+      students: [{ name: '张睿', tag: 'L4', st: '已预约' }] },
+    { id: 8, name: '一对一私教', coach: '李婷', court: 0, date: '2026-09-24', start: 14, dur: 1, cls: 'c-blue', cap: 1, status: 'todo',
+      students: [{ name: '李佳', tag: 'L2', st: '已预约' }] },
+    { id: 9, name: '一对一私教', coach: '李婷', court: 0, date: '2026-09-22', start: 10, dur: 1, cls: 'c-blue', cap: 1, status: 'done',
+      students: [{ name: '周涵', tag: 'L3', st: '已签到' }] },
+    { id: 10, name: '青少年进阶班', coach: '王建国', court: 2, date: '2026-09-22', start: 18.5, dur: 1.5, cls: 'c-orange', cap: 6, status: 'done',
+      students: [{ name: '林小乐', tag: 'L3', st: '已签到' }, { name: '王明', tag: 'L3', st: '缺席' }, { name: '张睿', tag: 'L4', st: '已签到' }, { name: '周涵', tag: 'L3', st: '已签到' }] },
+    { id: 11, name: '成人小班', coach: '陈浩', court: 1, date: '2026-09-23', start: 19, dur: 2, cls: 'c-green', cap: 6, status: 'done',
+      students: [{ name: '刘一鸣', tag: 'L2', st: '已签到' }, { name: '钱芳', tag: 'L2', st: '已签到' }, { name: '孙浩', tag: 'L2', st: '已签到' }] },
+    { id: 12, name: '青少年启蒙班', coach: '李婷', court: 2, date: '2026-09-26', start: 9, dur: 1.5, cls: 'c-orange', cap: 8, status: 'todo',
+      students: [{ name: '赵可欣', tag: 'L1', st: '已预约' }, { name: '孙浩', tag: 'L1', st: '已预约' }, { name: '何雨', tag: 'L1', st: '已预约' }] },
+    { id: 13, name: '一对一私教', coach: '赵磊', court: 3, date: '2026-09-25', start: 16, dur: 2, cls: 'c-blue', cap: 1, status: 'todo',
+      students: [{ name: '林小悦', tag: 'L2', st: '已预约' }] },
+    { id: 14, name: '体验课', coach: '李婷', court: 3, date: '2026-09-21', start: 15, dur: 1, cls: 'c-purple', cap: 4, status: 'done',
+      students: [{ name: '体验·韩雪', tag: '新', st: '已签到' }, { name: '体验·冯涛', tag: '新', st: '已签到' }] },
+    { id: 15, name: '成人提高班', coach: '赵磊', court: 1, date: '2026-09-24', start: 11, dur: 1.5, cls: 'c-green', cap: 6, status: 'draft',
+      students: [] },
   ];
   const fmt = h => String(Math.floor(h)).padStart(2, '0') + ':' + (h % 1 ? '30' : '00');
 
+  function inRange(l) {
+    const d = parseYmd(l.date);
+    if (calState.range === 'day') return ymd(d) === ymd(calState.cursor);
+    if (calState.range === 'week') {
+      const a = startOfWeek(calState.cursor), b = addDays(a, 7);
+      return d >= a && d < b;
+    }
+    return d.getFullYear() === calState.cursor.getFullYear() && d.getMonth() === calState.cursor.getMonth();
+  }
+  function visibleLessons() {
+    return lessons.filter(l => inRange(l) && (!calState.coach || l.coach === calState.coach));
+  }
+
   function findConflict(l, ignoreId) {
-    return lessons.find(o => o.id !== ignoreId && o.start < l.start + l.dur && l.start < o.start + o.dur &&
+    return lessons.find(o => o.id !== ignoreId && o.date === l.date && o.start < l.start + l.dur && l.start < o.start + o.dur &&
       (o.court === l.court || o.coach === l.coach));
   }
 
+  function updateCalLabel() {
+    const d = calState.cursor;
+    if (calState.range === 'day') document.getElementById('cal-label').textContent = `${dateLabel(d)} 周${WEEKDAYS[(d.getDay() || 7) - 1]}`;
+    else if (calState.range === 'week') {
+      const a = startOfWeek(d), b = addDays(a, 6);
+      document.getElementById('cal-label').textContent = `${dateLabel(a)} — ${dateLabel(b)}`;
+    } else document.getElementById('cal-label').textContent = `${d.getFullYear()}年${d.getMonth() + 1}月`;
+  }
+
+  function shiftCal(dir) {
+    const d = new Date(calState.cursor);
+    if (calState.range === 'day') d.setDate(d.getDate() + dir);
+    else if (calState.range === 'week') d.setDate(d.getDate() + dir * 7);
+    else d.setMonth(d.getMonth() + dir);
+    calState.cursor = d;
+    renderCal();
+  }
+
+  function renderStats(list) {
+    const bookedH = list.reduce((s, l) => s + l.dur, 0);
+    const done = list.filter(l => l.status === 'done');
+    const doneH = done.reduce((s, l) => s + l.dur, 0);
+    const stu = new Set(list.flatMap(l => (l.students || []).map(s => s.name)));
+    const days = calState.range === 'day' ? 1 : (calState.range === 'week' ? 7 : new Date(calState.cursor.getFullYear(), calState.cursor.getMonth() + 1, 0).getDate());
+    const capacity = COURTS.length * OPEN_H * (calState.range === 'month' ? days : days);
+    const occ = capacity ? Math.round(bookedH / capacity * 100) : 0;
+    document.getElementById('sch-stats').innerHTML = `
+      <div class="card stat"><div class="muted">已排课次</div><div class="num">${list.length}</div><div class="muted">已完成 ${done.length}</div></div>
+      <div class="card stat"><div class="muted">已排时长</div><div class="num">${bookedH}</div><div class="muted">小时 · 已完成 ${doneH} 小时</div></div>
+      <div class="card stat"><div class="muted">上课学员</div><div class="num">${stu.size}</div><div class="muted">去重人数</div></div>
+      <div class="card stat"><div class="muted">场地占用</div><div class="num" style="color:${occ >= 70 ? 'var(--accent)' : 'var(--primary)'}">${occ}%</div><div class="muted">相对可排 ${capacity} 小时</div></div>`;
+
+    const coachRows = COACHES.map(c => {
+      const mine = list.filter(l => l.coach === c);
+      if (calState.coach && c !== calState.coach && !mine.length) return '';
+      const dh = mine.filter(l => l.status === 'done').reduce((s, l) => s + l.dur, 0);
+      const bh = mine.reduce((s, l) => s + l.dur, 0);
+      const dn = mine.filter(l => l.status === 'done').length;
+      return `<tr><td>${c}</td><td>${mine.length}</td><td>${dn}</td><td><b>${bh}</b></td><td>${dh}</td><td><button class="btn sm ghost" onclick="openCoachSchedule('${c}')">只看此人</button></td></tr>`;
+    }).join('');
+    document.getElementById('tbl-coach-stat').innerHTML = `<tr><th>教练</th><th>已排节</th><th>已完成节</th><th>已排小时</th><th>已完成小时</th><th></th></tr>` + (coachRows || '<tr><td colspan="6" class="muted">本区间无课</td></tr>');
+    document.getElementById('coach-stat-scope').textContent = document.getElementById('cal-label').textContent;
+
+    document.getElementById('tbl-court-stat').innerHTML = `<tr><th>场地</th><th>已排节</th><th>已排小时</th><th>占用</th></tr>` + COURTS.map((name, i) => {
+      const mine = list.filter(l => l.court === i);
+      const h = mine.reduce((s, l) => s + l.dur, 0);
+      const den = OPEN_H * (calState.range === 'month' ? days : days);
+      const p = den ? Math.round(h / den * 100) : 0;
+      const cls = p >= 85 ? 'full' : (p >= 60 ? 'warn' : '');
+      return `<tr><td>${name}</td><td>${mine.length}</td><td>${h}</td><td><div class="row"><div class="occ ${cls}"><i style="width:${p}%"></i></div><span class="muted">${p}%</span></div></td></tr>`;
+    }).join('');
+
+    document.getElementById('tbl-lessons').innerHTML = `<tr><th>日期</th><th>时间</th><th>时长</th><th>场地</th><th>教练</th><th>课程</th><th>上课学员</th><th>人数</th><th>状态</th></tr>` +
+      (list.length ? list.slice().sort((a, b) => a.date === b.date ? a.start - b.start : a.date.localeCompare(b.date)).map(l =>
+        `<tr style="cursor:pointer" onclick="openLesson(${l.id})"><td>${l.date.slice(5).replace('-', '/')}</td><td>${fmt(l.start)}-${fmt(l.start + l.dur)}</td><td>${durLabel(l.dur)}</td><td>${COURTS[l.court]}</td><td>${l.coach}</td><td>${l.name}</td><td>${studentNames(l)}</td><td>${cntOf(l)}</td><td>${statusTag(l.status)}</td></tr>`
+      ).join('') : '<tr><td colspan="9" class="muted">本筛选下无课次</td></tr>');
+  }
+
+  function openLesson(id) {
+    const l = lessons.find(x => x.id === id);
+    if (!l) return;
+    document.getElementById('ld-title').textContent = l.name;
+    const rows = (l.students || []).map(s =>
+      `<div class="list-item"><div class="avatar sm">${s.name.slice(-1)}</div><div class="grow"><div class="bold">${s.name}</div><div class="muted">${s.tag}</div></div><span class="tag ${s.st === '已签到' ? 'green' : (s.st === '缺席' || s.st === '未到' ? 'red' : (s.st === '请假' ? 'orange' : 'blue'))}">${s.st}</span></div>`
+    ).join('') || '<div class="muted">暂无预约学员</div>';
+    document.getElementById('ld-body').innerHTML = `
+      <div class="lesson-kvs">
+        <div><div class="k">日期</div><div class="v">${l.date} 周${WEEKDAYS[(parseYmd(l.date).getDay() || 7) - 1]}</div></div>
+        <div><div class="k">时间</div><div class="v">${fmt(l.start)}–${fmt(l.start + l.dur)}</div></div>
+        <div><div class="k">时长</div><div class="v">${durLabel(l.dur)}</div></div>
+        <div><div class="k">场地</div><div class="v">${COURTS[l.court]}</div></div>
+        <div><div class="k">教练</div><div class="v">${l.coach}</div></div>
+        <div><div class="k">人数</div><div class="v">${cntOf(l)}</div></div>
+      </div>
+      <div>${statusTag(l.status)}</div>
+      <div><div class="bold" style="margin-bottom:6px">上课学员</div>${rows}</div>
+      <div class="row">
+        ${l.status === 'draft' ? `<button class="btn sm" onclick="publishLesson(${l.id})">发布</button>` : ''}
+        ${l.status !== 'done' && l.status !== 'draft' ? `<button class="btn sm line" onclick="openReschedule(${l.id})">调课</button><button class="btn sm line" onclick="openCancelLesson(${l.id})">取消</button>` : ''}
+        ${l.status === 'done' ? `<button class="btn sm line" onclick="openCorrect(${l.id})">更正点名</button>` : ''}
+      </div>`;
+    document.getElementById('lesson-drawer').classList.add('on');
+  }
+
+  let rsId = null, cxId = null, crId = null;
+  const rsStart = document.getElementById('rs-start');
+  for (let h = START_H; h < END_H; h += 0.5) rsStart.insertAdjacentHTML('beforeend', `<option value="${h}">${fmt(h)}</option>`);
+
+  function publishLesson(id) {
+    const l = lessons.find(x => x.id === id);
+    if (!l) return;
+    const c = findConflict(l, l.id);
+    if (c) return toast(`无法发布：与「${c.name}」冲突`);
+    l.status = 'todo';
+    document.getElementById('lesson-drawer').classList.remove('on');
+    renderCal();
+    toast('已发布，学员端可见');
+  }
+  function openReschedule(id, preset) {
+    const l = lessons.find(x => x.id === id);
+    if (!l) return;
+    rsId = id;
+    document.getElementById('rs-summary').textContent = `${l.name} · 现 ${l.date} ${fmt(l.start)}–${fmt(l.start + l.dur)} · ${COURTS[l.court]}`;
+    document.getElementById('rs-court').value = preset && preset.court != null ? preset.court : l.court;
+    rsStart.value = preset && preset.start != null ? preset.start : l.start;
+    document.getElementById('rs-students').innerHTML = '<div class="bold" style="margin-bottom:6px">将通知的上课学员</div>' +
+      ((l.students || []).map(s => `<div class="list-item"><span class="grow">${s.name}</span><span class="muted">${s.st}</span></div>`).join('') || '<div class="muted">暂无预约学员</div>');
+    document.getElementById('rs-conflict').classList.add('hidden');
+    document.getElementById('lesson-drawer').classList.remove('on');
+    document.getElementById('reschedule-modal').classList.add('on');
+  }
+  function closeReschedule() { document.getElementById('reschedule-modal').classList.remove('on'); rsId = null; }
+  function confirmReschedule() {
+    const l = lessons.find(x => x.id === rsId);
+    if (!l) return;
+    const moved = { ...l, court: +document.getElementById('rs-court').value, start: +rsStart.value };
+    if (moved.start + moved.dur > END_H) return toast('超出场馆营业时间');
+    const c = findConflict(moved, l.id);
+    const box = document.getElementById('rs-conflict');
+    if (c) {
+      box.textContent = `⚠ 冲突：与「${c.name}」(${c.coach} ${COURTS[c.court]} ${fmt(c.start)}) 时间重叠，不能确认`;
+      box.classList.remove('hidden');
+      return;
+    }
+    Object.assign(l, { court: moved.court, start: moved.start });
+    closeReschedule();
+    renderCal();
+    toast(`已调课到 ${COURTS[l.court]} ${fmt(l.start)}，已通知 ${(l.students || []).length} 位学员`);
+  }
+  function openCancelLesson(id) {
+    const l = lessons.find(x => x.id === id);
+    if (!l) return;
+    cxId = id;
+    document.getElementById('cx-note').textContent = `将取消「${l.name}」，释放名额并按规则退回预占课时，通知 ${(l.students || []).length} 人。`;
+    document.getElementById('lesson-drawer').classList.remove('on');
+    document.getElementById('cancel-modal').classList.add('on');
+  }
+  function confirmCancelLesson() {
+    const l = lessons.find(x => x.id === cxId);
+    if (l) l.status = 'done';
+    document.getElementById('cancel-modal').classList.remove('on');
+    renderCal();
+    toast(`已取消，原因：${document.getElementById('cx-reason').value}，学员已通知`);
+  }
+  function openCorrect(id) {
+    const l = lessons.find(x => x.id === id) || lessons.find(x => x.date === '2026-09-22');
+    if (!l) return toast('请从已完成课次进入更正');
+    crId = l.id;
+    document.getElementById('cr-stu').innerHTML = (l.students || []).map(s => `<option>${s.name}（${s.st}）</option>`).join('') || '<option>王明（缺席）</option>';
+    document.getElementById('drawer').classList.remove('on');
+    document.getElementById('lesson-drawer').classList.remove('on');
+    document.getElementById('correct-modal').classList.add('on');
+  }
+  function confirmCorrect() {
+    document.getElementById('correct-modal').classList.remove('on');
+    toast(`已更正 ${document.getElementById('cr-stu').value} 为「${document.getElementById('cr-st').value}」，原因已记入冲正流水`);
+  }
+
+  function openCoachSchedule(name) {
+    calState.coach = name;
+    document.getElementById('coach-filter').value = name;
+    switchView('schedule');
+  }
+
   function renderCal() {
+    updateCalLabel();
+    const list = visibleLessons();
+    renderStats(list);
     const cal = document.getElementById('cal');
-    cal.style.gridTemplateColumns = `${TIME_W}px repeat(${COURTS.length}, 1fr)`;
-    let html = '<div class="cal-head"><div style="border-left:none"></div>' + COURTS.map(c => `<div>${c}</div>`).join('') + '</div>';
+    cal.classList.toggle('month-list', calState.range === 'month');
+    if (calState.range === 'month') {
+      cal.innerHTML = '<div class="month-hint">月视图用下方「课次明细」和汇总表查看教练 / 场地统计。点「日」或「周」可回到格子课表。</div>';
+      return;
+    }
+
+    const cols = calState.mode === 'coach'
+      ? (calState.coach ? [calState.coach] : COACHES)
+      : (calState.range === 'week' ? WEEKDAYS.map((w, i) => {
+          const d = addDays(startOfWeek(calState.cursor), i);
+          return `${dateLabel(d)} 周${w}`;
+        }) : COURTS);
+    const weekStart = startOfWeek(calState.cursor);
+    let times = '<div class="hd"></div>';
     for (let h = START_H; h < END_H; h += 0.5) {
       const full = h % 1 === 0 ? ' full' : '';
-      html += `<div class="cal-time${full}">${full ? fmt(h) : ''}</div>`;
-      COURTS.forEach((_, ci) => { html += `<div class="cal-slot${full}" data-court="${ci}" data-h="${h}"></div>`; });
+      times += `<div class="cal-time${full}">${h % 1 === 0 ? fmt(h) : ''}</div>`;
     }
-    cal.innerHTML = html;
+    const colHtml = cols.map((name, ci) => {
+      let slots = '';
+      for (let h = START_H; h < END_H; h += 0.5) {
+        const full = h % 1 === 0 ? ' full' : '';
+        slots += `<div class="cal-slot${full}" data-col="${ci}" data-h="${h}"></div>`;
+      }
+      return `<div class="cal-col" data-col="${ci}"><div class="cal-col-head">${name}</div><div class="cal-col-body">${slots}</div></div>`;
+    }).join('');
+    cal.innerHTML = `<div class="cal-time-col">${times}</div>${colHtml}`;
 
-    const headH = cal.querySelector('.cal-head div').offsetHeight;
-    const colW = (cal.clientWidth - TIME_W) / COURTS.length;
-    lessons.forEach(l => {
+    list.forEach(l => {
+      let col = 0;
+      if (calState.mode === 'coach') col = cols.indexOf(l.coach);
+      else if (calState.range === 'week') col = Math.round((parseYmd(l.date) - weekStart) / 86400000);
+      else col = l.court;
+      const body = cal.querySelector(`.cal-col[data-col="${col}"] .cal-col-body`);
+      if (!body || col < 0) return;
+      const pupil = l.cap === 1 && l.students && l.students[0] ? l.students[0].name : '';
+      const title = pupil ? `${l.name} · ${pupil}` : l.name;
+      const extra = calState.range === 'week' || calState.mode === 'coach' ? COURTS[l.court] + ' · ' : '';
       const ev = document.createElement('div');
-      ev.className = 'ev ' + l.cls;
-      ev.draggable = true;
-      ev.style.left = (TIME_W + l.court * colW + 4) + 'px';
-      ev.style.width = (colW - 8) + 'px';
-      ev.style.top = (headH + (l.start - START_H) * 2 * SLOT_H + 2) + 'px';
+      ev.className = 'ev ' + l.cls + (l.dur <= 1 ? ' ev-sm' : '') + (l.status === 'draft' ? ' draft' : '');
+      ev.draggable = calState.range === 'day' && calState.mode === 'court';
+      ev.style.top = ((l.start - START_H) * 2 * SLOT_H + 2) + 'px';
       ev.style.height = (l.dur * 2 * SLOT_H - 4) + 'px';
-      ev.innerHTML = `<b>${l.name}</b>${fmt(l.start)}-${fmt(l.start + l.dur)} · ${l.coach} · ${l.cnt}`;
+      ev.innerHTML = `<div class="ev-title">${title}${l.status === 'draft' ? ' · 草稿' : ''}</div><div class="ev-time">${fmt(l.start)}–${fmt(l.start + l.dur)}</div><div class="ev-foot"><span class="ev-coach">${extra}${l.coach}${l.dur <= 1 ? ' · ' + fmt(l.start) : ''}</span><span class="ev-dur">${l.status === 'draft' ? '草稿' : Math.round(l.dur * 60) + '分'}</span></div>`;
       ev.addEventListener('dragstart', e => { e.dataTransfer.setData('id', l.id); ev.classList.add('dragging'); });
       ev.addEventListener('dragend', () => ev.classList.remove('dragging'));
-      ev.addEventListener('click', () => toast(`${l.name}｜${COURTS[l.court]} ${fmt(l.start)}｜${l.coach}｜${l.cnt}`));
-      cal.appendChild(ev);
+      ev.addEventListener('click', e => { e.stopPropagation(); openLesson(l.id); });
+      body.appendChild(ev);
     });
 
     cal.querySelectorAll('.cal-slot').forEach(s => {
@@ -485,15 +967,14 @@
       s.addEventListener('drop', e => {
         e.preventDefault(); s.classList.remove('over');
         const l = lessons.find(x => x.id === +e.dataTransfer.getData('id'));
-        const moved = { ...l, court: +s.dataset.court, start: +s.dataset.h };
+        if (!l) return;
+        const moved = { ...l, court: +s.dataset.col, start: +s.dataset.h };
         if (moved.start + moved.dur > END_H) return toast('超出场馆营业时间');
-        const c = findConflict(moved, l.id);
-        if (c) return toast(`⚠ 冲突：与「${c.name}」(${c.coach} ${COURTS[c.court]} ${fmt(c.start)}) 时间重叠`);
-        Object.assign(l, moved);
-        renderCal();
-        toast(`已调整到 ${COURTS[l.court]} ${fmt(l.start)}，已通知 ${l.cnt.split('/')[0]} 位学员`);
+        openReschedule(l.id, { court: +s.dataset.col, start: +s.dataset.h });
       });
-      s.addEventListener('click', () => openModal(+s.dataset.court, +s.dataset.h));
+      s.addEventListener('click', () => {
+        if (calState.range === 'day' && calState.mode === 'court') openModal(+s.dataset.col, +s.dataset.h);
+      });
     });
   }
 
@@ -507,23 +988,27 @@
     document.getElementById('modal').classList.add('on');
   }
   function closeModal() { document.getElementById('modal').classList.remove('on'); }
-  function createLesson() {
+  bindGroup('#seg-calmode', btn => { calState.mode = btn.dataset.v; renderCal(); });
+  bindGroup('#seg-calrange', btn => { calState.range = btn.dataset.v; renderCal(); });
+  document.getElementById('coach-filter').addEventListener('change', e => { calState.coach = e.target.value; renderCal(); });
+
+  function createLesson(publish) {
     const l = {
       id: Date.now(), name: document.getElementById('f-name').value, coach: document.getElementById('f-coach').value,
       court: +document.getElementById('f-court').value, start: +startSel.value, dur: +document.getElementById('f-dur').value,
-      cls: document.getElementById('f-type').value, cnt: '0/6',
+      cls: document.getElementById('f-type').value, date: ymd(calState.cursor), cap: 6, status: publish ? 'todo' : 'draft', students: [],
     };
     const box = document.getElementById('f-conflict');
     const c = findConflict(l);
     if (c) {
-      box.textContent = `⚠ 冲突：${c.coach === l.coach ? '教练 ' + c.coach : COURTS[c.court]} 在 ${fmt(c.start)}-${fmt(c.start + c.dur)} 已有「${c.name}」`;
+      box.textContent = `⚠ 冲突：${c.coach === l.coach ? '教练 ' + c.coach : COURTS[c.court]} 在 ${fmt(c.start)}-${fmt(c.start + c.dur)} 已有「${c.name}」` + (publish ? '' : '。草稿仍可保存，发布前须解决。');
       box.classList.remove('hidden');
-      return;
+      if (publish) return;
     }
     lessons.push(l);
     closeModal();
     renderCal();
-    toast('课程已发布，学员端可预约');
+    toast(publish ? '课程已发布，学员端可预约' : (c ? '草稿已保存（有冲突，学员端不可见）' : '已保存草稿，学员端不可见'));
   }
   window.addEventListener('resize', () => { if (document.getElementById('v-schedule').classList.contains('on')) renderCal(); });
   const _switch = switchView;

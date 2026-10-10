@@ -74,6 +74,8 @@ input, select, textarea { font-family: inherit; font-size: 14px; }
 .avatar.purple { background: linear-gradient(135deg, #b18cff, #7a4dff); }
 
 .phase { font-size: 10px; padding: 0 6px; border-radius: 4px; background: #7a4dff; color: #fff; margin-left: 4px; vertical-align: middle; }
+.phase.p2 { background: #2f6bff; }
+.phase.p3 { background: #c25e00; }
 
 /* ---------- 手机框 ---------- */
 .stage {
